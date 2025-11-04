@@ -60,7 +60,7 @@ export default function AddProduct({ nro_orden = 0 }: DetailOrderProps) {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="!w-[90vw] !h-[90vh] !max-w-none">
+      <DialogContent className="!w-[90vw] !h-[90vh] !max-w-none bg-white">
         <DialogHeader>
           <DialogTitle className="text-[#484848]">
             Detalle orden #{nro_orden}
