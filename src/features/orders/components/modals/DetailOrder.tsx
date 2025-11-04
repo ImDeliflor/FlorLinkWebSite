@@ -104,7 +104,7 @@ export default function DetailOrder({
         </button>
       </DialogTrigger>
 
-      <DialogContent className="!w-[90vw] !h-[90vh] !max-w-none">
+      <DialogContent className="!w-[90vw] !h-[90vh] !max-w-none bg-white border-none text-[#484848]">
         <DialogHeader>
           <DialogTitle className="text-[#484848]">
             Detalle orden #{nro_orden}
@@ -116,7 +116,7 @@ export default function DetailOrder({
         </DialogHeader>
 
         {/* Contenido personalizado */}
-        <div className="grid gap-4 py-4  overflow-y-auto">
+        <div className="grid gap-4 py-4 overflow-y-auto">
           {filteredProductReport.map((_valor, index) => (
             <FormEditProduct
               key={index}
