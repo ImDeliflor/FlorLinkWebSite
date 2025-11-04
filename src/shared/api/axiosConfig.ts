@@ -5,10 +5,22 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  try {
+    // Obtener el objeto completo del store persistido
+    const storedData = localStorage.getItem("auth-storage");
+
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      const token = parsed?.state?.token;
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+  } catch (error) {
+    console.error("Error leyendo el token del localStorage:", error);
   }
+
   return config;
 });
 

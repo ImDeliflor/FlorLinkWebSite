@@ -3,13 +3,13 @@ import { CiLogout } from "react-icons/ci";
 import { IoIosFlower } from "react-icons/io";
 import { MdAccountBalance } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthStore } from "../store/authStore";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  const { logout } = useAuthContext();
+  const { logout, user } = useAuthStore();
 
   return (
     // 👇 altura mínima de toda la pantalla y layout flex
@@ -106,23 +106,27 @@ export const Navbar = () => {
                       Mis órdenes de compra
                     </NavLink>
                   </li>
-
-                  <li>
-                    <NavLink
-                      to="/shopping/team-orders"
-                      className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
-                    >
-                      Órdenes de mi equipo
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/shopping/orders"
-                      className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
-                    >
-                      Órdenes de compra
-                    </NavLink>
-                  </li>
+                  {user?.id_usuario === 13 ||
+                    (user?.id_usuario === 30 && (
+                      <>
+                        <li>
+                          <NavLink
+                            to="/shopping/team-orders"
+                            className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                          >
+                            Órdenes de mi equipo
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/shopping/orders"
+                            className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                          >
+                            Órdenes de compra
+                          </NavLink>
+                        </li>
+                      </>
+                    ))}
                 </ul>
               )}
             </li>

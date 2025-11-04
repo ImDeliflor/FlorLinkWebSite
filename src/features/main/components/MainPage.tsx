@@ -1,7 +1,7 @@
-import { useAuthContext } from "@/shared/hooks/useAuthContext";
+import { useAuthStore } from "@/shared/store/authStore";
 
 export const MainPage = () => {
-  const { user } = useAuthContext();
+  const { user } = useAuthStore();
 
   return (
     <div className="flex flex-col justify-center items-center text-center min-h-full">

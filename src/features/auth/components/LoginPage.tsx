@@ -5,7 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/apiConfig";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "@/shared/hooks/useAuthContext";
+import { useAuthStore } from "@/shared/store/authStore";
 
 interface FormData {
   email: string;
@@ -18,7 +18,8 @@ export const LoginPage = () => {
     password_hash: "",
   });
 
-  const { login } = useAuthContext();
+  const { login } = useAuthStore();
+
   const navigate = useNavigate();
 
   const handleLogin = async () => {

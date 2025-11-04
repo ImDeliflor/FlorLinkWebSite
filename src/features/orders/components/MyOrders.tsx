@@ -12,6 +12,7 @@ import DetailOrder from "./modals/DetailOrder";
 import { useProductContext } from "@/features/products/hooks/useProductContext";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
 import AddProduct from "@/features/products/components/modals/AddProduct";
+import { useAuthStore } from "@/shared/store/authStore";
 
 export const MyOrders = () => {
   // OrderContext -> data y funciones correspondientes a las órdenes
@@ -22,6 +23,8 @@ export const MyOrders = () => {
 
   // Contexto de las tablas básicas (categoría)
   const { getCategorias } = useBasicTablesContext();
+
+  const { user } = useAuthStore();
 
   // Configuración de la zona horaria
   dayjs.extend(utc);
@@ -80,34 +83,36 @@ export const MyOrders = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
-                <tr
-                  key={index}
-                  className="border-t hover:bg-gray-50 transition"
-                >
-                  <td className="px-4 py-2">{order.id_orden_compra}</td>
-                  <td className="px-4 py-2">{order.fecha}</td>
-                  <td
-                    className={`px-4 py-2 font-medium ${
-                      order.estado_compra === "Aprobado por gerencia"
-                        ? "text-[#207349]"
-                        : order.estado_compra === "Rechazado por gerencia" ||
-                          order.estado_compra === "Rechazado por lider"
-                        ? "text-[#b82834]"
-                        : "text-[#E9B44C]"
-                    }`}
+              {orders
+                .filter((order) => order.solicitado_por === user?.id_usuario)
+                .map((order, index) => (
+                  <tr
+                    key={index}
+                    className="border-t hover:bg-gray-50 transition"
                   >
-                    {order.estado_compra}
-                  </td>
-                  <td className="px-4 py-2">{order.observaciones}</td>
-                  <td className="px-4 py-2">
-                    <AddProduct nro_orden={order.id_orden_compra} />
-                  </td>
-                  <td className="px-4 py-2">
-                    <DetailOrder nro_orden={order.id_orden_compra} />
-                  </td>
-                </tr>
-              ))}
+                    <td className="px-4 py-2">{order.id_orden_compra}</td>
+                    <td className="px-4 py-2">{order.fecha}</td>
+                    <td
+                      className={`px-4 py-2 font-medium ${
+                        order.estado_compra === "Aprobado por gerencia"
+                          ? "text-[#207349]"
+                          : order.estado_compra === "Rechazado por gerencia" ||
+                            order.estado_compra === "Rechazado por lider"
+                          ? "text-[#b82834]"
+                          : "text-[#E9B44C]"
+                      }`}
+                    >
+                      {order.estado_compra}
+                    </td>
+                    <td className="px-4 py-2">{order.observaciones}</td>
+                    <td className="px-4 py-2">
+                      <AddProduct nro_orden={order.id_orden_compra} />
+                    </td>
+                    <td className="px-4 py-2">
+                      <DetailOrder nro_orden={order.id_orden_compra} />
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         )}

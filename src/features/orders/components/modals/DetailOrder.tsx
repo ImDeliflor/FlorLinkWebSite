@@ -152,11 +152,6 @@ export default function DetailOrder({
             </DialogClose>
           ) : (
             <>
-              <DialogClose asChild>
-                <Button className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10">
-                  Aceptar
-                </Button>
-              </DialogClose>
               <Button
                 disabled={
                   JSON.stringify(filteredProductReport) ==

@@ -2,10 +2,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { UserRoutes } from "./routes/UserRoutes";
 
 import { LoginPage } from "./features/auth/components/LoginPage";
-import { useAuthContext } from "./shared/hooks/useAuthContext";
+import { useAuthStore } from "./shared/store/authStore";
 
 export const App = () => {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <>

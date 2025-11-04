@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CiTrash } from "react-icons/ci";
@@ -92,11 +91,6 @@ export default function AddProduct({ nro_orden = 0 }: DetailOrderProps) {
         </div>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10">
-              Aceptar
-            </Button>
-          </DialogClose>
           <Button
             disabled={arrayProducts.length > 0 ? false : true}
             onClick={handlerAddProducts}

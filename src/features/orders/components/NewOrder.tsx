@@ -10,11 +10,11 @@ import { FormProduct } from "@/features/products/components/FormProduct";
 import { useGlobalDataContext } from "@/shared/hooks/useGlobalDataContext";
 import { useEffect } from "react";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuthStore } from "@/shared/store/authStore";
 
 export const NewOrder = () => {
   // Contexto global del usuario logeado
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   // OrderContext -> data y funciones correspondientes a las órdenes
   const {

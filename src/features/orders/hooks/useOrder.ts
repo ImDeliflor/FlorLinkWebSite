@@ -7,7 +7,7 @@ import { API_BASE_URL } from "@/config/apiConfig";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { useAuthContext } from "@/shared/hooks/useAuthContext";
+import { useAuthStore } from "@/shared/store/authStore";
 
 const initialProduct: Product = {
   id_categoria: 1,
@@ -23,7 +23,7 @@ export const useOrder = () => {
   dayjs.locale("es");
 
   // Contexto global del usuario logeado
-  const { user } = useAuthContext();
+  const { user } = useAuthStore();
 
   // Estado inicial para las ordenes
   const initialOrder: Order = {
@@ -64,6 +64,7 @@ export const useOrder = () => {
     setArrayProducts((prev) => {
       // copiar el array actual
       const updated = [...prev];
+
       // actualizar SOLO el campo indicado en el objeto indicado
       updated[index] = { ...updated[index], [key]: value };
       return updated;
