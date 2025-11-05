@@ -10,7 +10,7 @@ import utc from "dayjs/plugin/utc";
 import { useAuthStore } from "@/shared/store/authStore";
 
 const initialProduct: Product = {
-  id_categoria: 1,
+  id_categoria: 24,
   descripcion_producto: "",
   unidad_medida: "bultos",
   cantidad_solicitada: 0,

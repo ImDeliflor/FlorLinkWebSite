@@ -4,7 +4,6 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/es"; // importar el idioma
 import { useEffect, useMemo, useState } from "react";
-import Rules from "./rules/Rules";
 import { useOrderContext } from "../hooks/useOrderContext";
 import { IoCartOutline } from "react-icons/io5";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
@@ -70,7 +69,7 @@ export const Orders = () => {
             Ordenes de mi equipo
           </span>
         </div>
-        <Rules />
+        {/* <Rules /> */}
       </div>
 
       <div className="flex items-center justify-center min-h-[10%] min-w-full bg-transparent px-5 rounded-[0.7rem]">

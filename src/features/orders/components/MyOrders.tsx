@@ -4,7 +4,6 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/es"; // importar el idioma
 import { useEffect } from "react";
-import Rules from "./rules/Rules";
 import { useOrderContext } from "../hooks/useOrderContext";
 import { IoCartOutline } from "react-icons/io5";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
@@ -38,6 +37,20 @@ export const MyOrders = () => {
     getCategorias();
   }, []);
 
+  const totalOrders = orders.reduce(
+    (acc, order) => (order.solicitado_por == user?.id_usuario ? acc + 1 : acc),
+    0
+  );
+
+  const pendingOrders = orders.reduce(
+    (acc, order) =>
+      order.estado_compra == "En proceso" &&
+      order.solicitado_por == user?.id_usuario
+        ? acc + 1
+        : acc,
+    0
+  );
+
   /*********************** FUNCIÓN PARA ENVIAR LA ORDEN DE LA COMPRA JUNTO AL DETALLE */
 
   return (
@@ -49,18 +62,22 @@ export const MyOrders = () => {
             Mis órdenes de compra
           </span>
         </div>
-        <Rules />
+        {/* <Rules /> */}
       </div>
 
       <div className="flex items-center justify-center min-h-[10%] min-w-full bg-transparent px-5 rounded-[0.7rem]">
         <div className="flex flex-col items-center justify-center bg-[#E8B7BA] mx-10 py-5 px-7 rounded-xl">
-          <span className="text-4xl text-[#82385D] font-extrabold">12</span>
+          <span className="text-4xl text-[#82385D] font-extrabold">
+            {totalOrders}
+          </span>
           <span className="text-xl text-[#82385d93] font-bold">
             Órdenes de compra totales
           </span>
         </div>
         <div className="flex flex-col items-center justify-center bg-[#E8B7BA] mx-10 py-5 px-7 rounded-xl">
-          <span className="text-4xl text-[#82385D] font-extrabold ">2</span>
+          <span className="text-4xl text-[#82385D] font-extrabold ">
+            {pendingOrders}
+          </span>
           <span className="text-xl text-[#82385d93] font-bold">
             Órdenes pendientes de revisión
           </span>
@@ -74,10 +91,10 @@ export const MyOrders = () => {
           <table className="min-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
             <thead className="bg-[#E8B7BA] text-white">
               <tr>
-                <th className="px-4 py-2">#</th>
-                <th className="px-4 py-2">Fecha</th>
-                <th className="px-4 py-2">Estado</th>
-                <th className="px-4 py-2">Observaciones</th>
+                <th className="px-4 py-3">#</th>
+                <th className="px-4 py-3">Fecha</th>
+                <th className="px-4 py-3">Estado</th>
+                <th className="px-4 py-3">Observaciones</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -88,7 +105,7 @@ export const MyOrders = () => {
                 .map((order, index) => (
                   <tr
                     key={index}
-                    className="border-t hover:bg-gray-50 transition"
+                    className="border-t hover:bg-gray-50 transition border-[#d1d1d1]"
                   >
                     <td className="px-4 py-2">{order.id_orden_compra}</td>
                     <td className="px-4 py-2">{order.fecha}</td>

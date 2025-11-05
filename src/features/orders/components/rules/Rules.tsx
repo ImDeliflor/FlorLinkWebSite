@@ -21,7 +21,7 @@ export default function Rules() {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="w-full h-auto">
+      <DialogContent className="w-full h-auto bg-white">
         <DialogHeader>
           <DialogTitle className="text-[#484848]">
             Reglas para las órdenes de compra

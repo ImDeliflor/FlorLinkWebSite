@@ -93,7 +93,14 @@ export const Navbar = () => {
                   <li>
                     <NavLink
                       to="/shopping/new-order"
-                      className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                      className={({ isActive }) =>
+                        `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                      }
                     >
                       Crear orden de compra
                     </NavLink>
@@ -101,32 +108,52 @@ export const Navbar = () => {
                   <li>
                     <NavLink
                       to="/shopping/my-orders"
-                      className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                      className={({ isActive }) =>
+                        `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                      }
                     >
                       Mis órdenes de compra
                     </NavLink>
                   </li>
-                  {user?.id_usuario === 13 ||
-                    (user?.id_usuario === 30 && (
-                      <>
-                        <li>
-                          <NavLink
-                            to="/shopping/team-orders"
-                            className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
-                          >
-                            Órdenes de mi equipo
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink
-                            to="/shopping/orders"
-                            className="flex items-center w-full font-light p-2 text-[1rem] hover:text-[#82385D] text-white transition pl-11 duration-75 rounded-lg group hover:bg-[#E8B7BA]"
-                          >
-                            Órdenes de compra
-                          </NavLink>
-                        </li>
-                      </>
-                    ))}
+                  {(user?.id_usuario == 14 || user?.id_usuario == 30) && (
+                    <>
+                      <li>
+                        <NavLink
+                          to="/shopping/team-orders"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Órdenes de mi equipo
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/shopping/orders"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Órdenes de compra
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
                 </ul>
               )}
             </li>

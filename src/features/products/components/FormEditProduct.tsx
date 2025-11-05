@@ -83,11 +83,11 @@ export const FormEditProduct = ({
         onChange={(e) =>
           updateFilteredProduct(
             index_producto,
-            "id_categoria_producto",
+            "id_categoria",
             Number(e.target.value)
           )
         }
-        disabled={is_jefe || (is_gerencia && true)}
+        disabled={(is_jefe || is_gerencia) && true}
       >
         {[...categorias]
           .sort((a, b) =>
