@@ -69,7 +69,7 @@ export const NewOrder = () => {
         <h2 className="text-2xl text-[#484848] font-medium mb-5">
           Listado de productos
         </h2>
-        <div className="flex flex-col items-center gap-y-4 mt-5 mb-5 max-h-[60%] min-h-[60%] w-full overflow-y-auto">
+        <div className="flex flex-col items-center gap-y-4 mt-5 mb-5 max-h-[60%] min-h-[40%] w-full overflow-y-auto">
           {arrayProducts.map((_valor, index) => (
             <FormProduct _valor={_valor} index={index} key={index} />
           ))}

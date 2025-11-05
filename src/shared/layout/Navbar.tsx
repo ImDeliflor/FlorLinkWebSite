@@ -120,7 +120,7 @@ export const Navbar = () => {
                       Mis órdenes de compra
                     </NavLink>
                   </li>
-                  {(user?.id_usuario == 14 || user?.id_usuario == 30) && (
+                  {(user?.id_usuario == 13 || user?.id_usuario == 30) && (
                     <>
                       <li>
                         <NavLink
