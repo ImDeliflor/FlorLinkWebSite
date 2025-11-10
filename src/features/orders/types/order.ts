@@ -8,6 +8,7 @@ export interface Order {
   aprobado_por?: number | null | undefined;
   estado_compra:
     | "En proceso"
+    | "En aprobación gerencial"
     | "Aprobado por gerencia"
     | "Rechazado por gerencia"
     | "Rechazado por lider";
@@ -20,9 +21,10 @@ export interface UpdateOrder {
   fecha?: string;
   observaciones?: string;
   solicitado_por?: number;
-  aprobado_por?: number;
+  aprobado_por?: number | null;
   estado_compra?:
     | "En proceso"
+    | "En aprobación gerencial"
     | "Aprobado por gerencia"
     | "Rechazado por gerencia"
     | "Rechazado por lider";

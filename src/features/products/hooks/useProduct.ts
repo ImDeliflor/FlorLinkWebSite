@@ -4,7 +4,15 @@ import axios from "axios";
 import { API_BASE_URL } from "@/config/apiConfig";
 import Swal from "sweetalert2";
 
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
 export const useProduct = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.locale("es");
+
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
 
@@ -69,6 +77,7 @@ export const useProduct = () => {
     setOpen(false);
   };
 
+  // Función para aceptar o rechazar un producto
   const setDetailProductState = async (product: UpdateProduct) => {
     try {
       await axios.put(
@@ -79,6 +88,52 @@ export const useProduct = () => {
     } catch (error) {
       console.log("Error al cargar el nuevo estado del producto: ", error);
       throw error;
+    }
+  };
+
+  // Función para aceptar o rechazar todos los productos de una orden
+  const setAllDetailProductsState = async (
+    arrayProducts: DetalleCompra[],
+    estado: "Pendiente" | "Aprobado" | "Rechazado"
+  ) => {
+    arrayProducts.map(async (product) => {
+      try {
+        setDetailProductState({
+          id_detalle_compra: product.id_detalle_compra,
+          estado_detalle_compra: estado,
+          fecha_validacion_detalle_compra: dayjs().format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
+        });
+      } catch (error) {
+        console.error(
+          "Error al setear el producto: ",
+          product.descripcion_producto
+        );
+        throw error;
+      }
+    });
+  };
+
+  // Función para eliminar un producto
+  const deleteProduct = async (id_detalle_compra: number) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/detalle-compra/${id_detalle_compra}`);
+      getProductsReport();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message;
+
+        if (status === 404) {
+          alert("Empleado no encontrado");
+        } else {
+          alert(message || "Error al eliminar el empleado");
+        }
+      } else {
+        console.error(error);
+        alert("Error desconocido al eliminar");
+      }
     }
   };
 
@@ -95,5 +150,7 @@ export const useProduct = () => {
     open,
     setDetailProductState,
     setStateOpen,
+    setAllDetailProductsState,
+    deleteProduct,
   };
 };

@@ -4,12 +4,19 @@ import { IoIosFlower } from "react-icons/io";
 import { MdAccountBalance } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import {
+  PermissionsDropdowns,
+  PermissionsSections,
+} from "../config/permissions";
+import { useProtectedElement } from "../hooks/useProtectedElement";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  const { logout, user } = useAuthStore();
+  const { logout } = useAuthStore();
+
+  const { canAccess, esLiderGrupoColaborativo } = useProtectedElement();
 
   return (
     // 👇 altura mínima de toda la pantalla y layout flex
@@ -58,73 +65,44 @@ export const Navbar = () => {
               </Link>
             </li>
             {/* Dropdown Contabilidad */}
-            <li>
-              <button
-                type="button"
-                onClick={() => setOpenDropdown(!openDropdown)}
-                className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
-              >
-                <MdAccountBalance size={23} />
-                <span className="flex-1 ms-3 text-left whitespace-nowrap">
-                  Contabilidad
-                </span>
-                <svg
-                  className={`w-3 h-3 transition-transform ${
-                    openDropdown ? "rotate-180" : ""
-                  }`}
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
+            {canAccess(PermissionsDropdowns.contabilidad) && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdown(!openDropdown)}
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
+                  <MdAccountBalance size={23} />
+                  <span className="flex-1 ms-3 text-left whitespace-nowrap">
+                    Contabilidad
+                  </span>
+                  <svg
+                    className={`w-3 h-3 transition-transform ${
+                      openDropdown ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
 
-              {/* Submenú */}
-              {openDropdown && (
-                <ul className="py-2 space-y-2">
-                  <li>
-                    <NavLink
-                      to="/shopping/new-order"
-                      className={({ isActive }) =>
-                        `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
-     ${
-       isActive
-         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
-         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
-     }`
-                      }
-                    >
-                      Crear orden de compra
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/shopping/my-orders"
-                      className={({ isActive }) =>
-                        `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
-     ${
-       isActive
-         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
-         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
-     }`
-                      }
-                    >
-                      Mis órdenes de compra
-                    </NavLink>
-                  </li>
-                  {(user?.id_usuario == 13 || user?.id_usuario == 30) && (
-                    <>
+                {/* Submenú */}
+                {openDropdown && (
+                  <ul className="py-2 space-y-2">
+                    {/* elemento para las órdenes nuevas */}
+                    {canAccess(PermissionsSections.contabilidad.nuevaOrden) && (
                       <li>
                         <NavLink
-                          to="/shopping/team-orders"
+                          to="/shopping/new-order"
                           className={({ isActive }) =>
                             `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
      ${
@@ -134,9 +112,54 @@ export const Navbar = () => {
      }`
                           }
                         >
-                          Órdenes de mi equipo
+                          Crear orden de compra
                         </NavLink>
                       </li>
+                    )}
+
+                    {/* elemento para mis órdenes */}
+                    {canAccess(PermissionsSections.contabilidad.misOrdenes) && (
+                      <li>
+                        <NavLink
+                          to="/shopping/my-orders"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Mis órdenes de compra
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {/* elemento para órdenes de mi equipo */}
+                    {canAccess(
+                      PermissionsSections.contabilidad.ordenesEquipo
+                    ) &&
+                      esLiderGrupoColaborativo() && (
+                        <li>
+                          <NavLink
+                            to="/shopping/team-orders"
+                            className={({ isActive }) =>
+                              `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                            }
+                          >
+                            Órdenes de mi equipo
+                          </NavLink>
+                        </li>
+                      )}
+
+                    {/* elemento para todas las órdenes */}
+                    {canAccess(PermissionsSections.contabilidad.ordenes) && (
                       <li>
                         <NavLink
                           to="/shopping/orders"
@@ -152,11 +175,11 @@ export const Navbar = () => {
                           Órdenes de compra
                         </NavLink>
                       </li>
-                    </>
-                  )}
-                </ul>
-              )}
-            </li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
           </ul>
           <div className="w-full flex items-center justify-center">
             <button

@@ -1,4 +1,4 @@
-import type { Product } from "@/features/products/types/product";
+import type { DetalleCompra, Product } from "@/features/products/types/product";
 import { useEffect, useState } from "react";
 import { type Order, type OrdersList, type UpdateOrder } from "../types/order";
 import Swal from "sweetalert2";
@@ -75,6 +75,9 @@ export const useOrder = () => {
 
   // useState para las órdenes de compra
   const [order, setOrder] = useState<Order>(initialOrder);
+
+  // useState para deshabilitar el botón mientras se envía toda la información
+  const [disabledButton, setDisabledButton] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -155,6 +158,7 @@ export const useOrder = () => {
 
     // try para el envío de los datos a la API
     try {
+      setDisabledButton(true);
       const response_order = await axios.post(
         `${API_BASE_URL}/orden-compra`,
         new_order
@@ -202,6 +206,8 @@ export const useOrder = () => {
       console.error("Error al guardar la orden de compra: ", error);
       console.log(error);
       throw error;
+    } finally {
+      setDisabledButton(false);
     }
   };
 
@@ -272,14 +278,65 @@ export const useOrder = () => {
   const sendToApproval = async (
     order: UpdateOrder,
     message: string,
-    id?: number
+    id?: number,
+    productsToValidate?: DetalleCompra[],
+    decision?: "Aprobar" | "Rechazar"
   ) => {
+    // Validar que no haya nada pendiente
+    if (productsToValidate && decision == "Aprobar") {
+      const validarAprobados = productsToValidate?.some(
+        (detalle) => detalle.estado_detalle_compra === "Aprobado"
+      );
+
+      // Validar que haya almenos un producto aprobado
+      if (!validarAprobados) {
+        Swal.fire({
+          icon: "error",
+          title: "¡Debe haber almenos 1 producto aprobado!",
+          confirmButtonColor: "#82385D",
+        });
+        return;
+      }
+
+      const validarPendientes = productsToValidate?.some(
+        (detalle) => detalle.estado_detalle_compra === "Pendiente"
+      );
+
+      // Validar en caso de haber almenos un producto pendiente
+      if (validarPendientes) {
+        Swal.fire({
+          icon: "error",
+          title: "¡No puede haber ningún producto pendiente por aprobación!",
+          confirmButtonColor: "#82385D",
+        });
+        return;
+      }
+    }
+
+    // Validar que esté todo rechazado en caso de rechazar la orden
+    if (productsToValidate && decision == "Rechazar") {
+      const estadosPermitidos = ["Rechazado"];
+
+      const validarEstados = productsToValidate?.every((detalle) =>
+        estadosPermitidos.includes(detalle.estado_detalle_compra)
+      );
+
+      if (!validarEstados) {
+        Swal.fire({
+          icon: "error",
+          title: "¡No pueden haber órdenes pendientes ni aprobadas!",
+          confirmButtonColor: "#82385D",
+        });
+        return;
+      }
+    }
+
     if (id) {
       try {
         await axios.put(`${API_BASE_URL}/orden-compra/${id}`, order);
         Swal.fire({
           icon: "success",
-          title: { message },
+          title: message,
           confirmButtonColor: "#82385D",
         });
         getOrders();
@@ -300,6 +357,10 @@ export const useOrder = () => {
     setArrayProducts([]);
   };
 
+  const changeStateButton = (state: boolean) => {
+    setDisabledButton(state);
+  };
+
   // Datos y funciones a retornar
   return {
     arrayProducts,
@@ -315,5 +376,7 @@ export const useOrder = () => {
     handlerSubmitOrder,
     handlerUpdateProduct,
     sendToApproval,
+    disabledButton,
+    changeStateButton,
   };
 };

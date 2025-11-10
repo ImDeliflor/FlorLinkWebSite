@@ -44,6 +44,8 @@ export interface UserData {
   tipo_contrato: string;
   tipo_documento: string;
   id_usuario: number | null;
+  id_rol: number | null;
+  nombre_rol: string | null;
   id_jefe_grupo_colaborativo: number | null;
   jefe_grupo_colaborativo: string | null;
   id_grupo_colaborativo: number | null;

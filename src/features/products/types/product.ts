@@ -40,6 +40,7 @@ export interface DetalleCompra {
   fecha_validacion_detalle_compra: string | null;
   estado_compra:
     | "En proceso"
+    | "En aprobación gerencial"
     | "Aprobado por gerencia"
     | "Rechazado por gerencia"
     | "Rechazado por lider";

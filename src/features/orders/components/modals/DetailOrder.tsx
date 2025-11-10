@@ -21,16 +21,24 @@ interface DetailOrderProps {
   nro_orden: number | undefined;
   is_jefe?: boolean;
   is_gerencia?: boolean;
+  canEdit?: boolean;
+  canChangeState?: boolean;
 }
 
 export default function DetailOrder({
   nro_orden,
   is_jefe = false,
   is_gerencia = false,
+  canEdit = true,
+  canChangeState = true,
 }: DetailOrderProps) {
   // Traer los datos detallados de los productos
-  const { productReport, getProductsReport, handlerUpdateProduct } =
-    useProductContext();
+  const {
+    productReport,
+    getProductsReport,
+    handlerUpdateProduct,
+    setAllDetailProductsState,
+  } = useProductContext();
 
   // useState para la data original
   const [initialProductReport, setInitialProductReport] = useState<
@@ -40,6 +48,8 @@ export default function DetailOrder({
   const [filteredProductReport, setFilteredProductReport] = useState<
     DetalleCompra[]
   >([]);
+
+  const [nombreSolicitante, setNombreSolicitante] = useState("");
 
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
@@ -55,6 +65,11 @@ export default function DetailOrder({
   useEffect(() => {
     if (open && nro_orden) {
       getDataFiltered(nro_orden);
+      setNombreSolicitante(
+        initialProductReport[0].solicitado_por
+          ? initialProductReport[0].solicitado_por
+          : ""
+      );
     }
   }, [open]);
 
@@ -86,10 +101,10 @@ export default function DetailOrder({
     }
   };
 
-  useEffect(() => {
-    console.log(initialProductReport);
-    console.log(filteredProductReport);
-  }, [filteredProductReport]);
+  // useEffect(() => {
+  //   console.log(initialProductReport);
+  //   console.log(filteredProductReport);
+  // }, [filteredProductReport]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -107,7 +122,7 @@ export default function DetailOrder({
       <DialogContent className="!w-[90vw] !h-[90vh] !max-w-none bg-white border-none text-[#484848]">
         <DialogHeader>
           <DialogTitle className="text-[#484848]">
-            Detalle orden #{nro_orden}
+            Detalle orden #{nro_orden} - {nombreSolicitante}
           </DialogTitle>
           <DialogDescription>
             Edita y visualiza todo el detalle de los productos asociados a la
@@ -130,21 +145,33 @@ export default function DetailOrder({
               updateFilteredProduct={updateFilteredProduct}
               is_jefe={is_jefe}
               is_gerencia={is_gerencia}
+              canChangeState={canChangeState}
+              canEdit={canEdit}
             />
           ))}
         </div>
 
         <DialogFooter>
-          {is_jefe ? (
+          {is_jefe && canChangeState ? (
             <>
-              <Button className="bg-[#861f27] text-[#fff] cursor-pointer mx-3 px-10">
+              <Button
+                className="bg-[#861f27] text-[#fff] cursor-pointer mx-3 px-10"
+                onClick={() =>
+                  setAllDetailProductsState(initialProductReport, "Rechazado")
+                }
+              >
                 Rechazar todo
               </Button>
-              <Button className="bg-[#207349] text-[#fff] cursor-pointer mx-5 px-10">
+              <Button
+                className="bg-[#207349] text-[#fff] cursor-pointer mx-5 px-10"
+                onClick={() =>
+                  setAllDetailProductsState(initialProductReport, "Aprobado")
+                }
+              >
                 Aprobar todo
               </Button>
             </>
-          ) : is_gerencia ? (
+          ) : is_gerencia && canChangeState ? (
             <DialogClose asChild>
               <Button className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10">
                 Aceptar
@@ -152,18 +179,20 @@ export default function DetailOrder({
             </DialogClose>
           ) : (
             <>
-              <Button
-                disabled={
-                  JSON.stringify(filteredProductReport) ==
-                  JSON.stringify(initialProductReport)
-                    ? true
-                    : false
-                }
-                onClick={handleUpdateProducts}
-                className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
-              >
-                Editar
-              </Button>
+              {canEdit && !is_jefe && !is_gerencia && (
+                <Button
+                  disabled={
+                    JSON.stringify(filteredProductReport) ==
+                    JSON.stringify(initialProductReport)
+                      ? true
+                      : false
+                  }
+                  onClick={handleUpdateProducts}
+                  className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
+                >
+                  Editar
+                </Button>
+              )}
             </>
           )}
         </DialogFooter>

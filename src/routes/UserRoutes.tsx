@@ -9,6 +9,9 @@ import { ProductProvider } from "@/features/products/context/ProductProvider";
 import { BasicTablesProvider } from "@/features/basic_tables/context/BasicTablesProvider";
 import { TeamOrders } from "@/features/orders/components/TeamOrders";
 import { Orders } from "@/features/orders/components/Orders";
+import { Unauthorized } from "@/features/auth/components/Unauthorized";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { PermissionsSections } from "@/shared/config/permissions";
 
 export const UserRoutes = () => {
   return (
@@ -20,13 +23,19 @@ export const UserRoutes = () => {
             {/* Ruta inicial (bienvenida) */}
             <Route path="/" element={<MainPage />} />
 
+            {/* Ruta en caso de no estar autorizado */}
+            <Route path="/unauthorized" element={<Unauthorized />} />
+
             {/* Rutas para la sección de órdenes de compra */}
             <Route
               path="/shopping/new-order"
               element={
                 <BasicTablesProvider>
                   <OrderProvider>
-                    <NewOrder />
+                    <ProtectedRoute
+                      allowedRoles={PermissionsSections.contabilidad.nuevaOrden}
+                      element={<NewOrder />}
+                    />
                   </OrderProvider>
                 </BasicTablesProvider>
               }
@@ -37,7 +46,12 @@ export const UserRoutes = () => {
                 <BasicTablesProvider>
                   <ProductProvider>
                     <OrderProvider>
-                      <MyOrders />
+                      <ProtectedRoute
+                        allowedRoles={
+                          PermissionsSections.contabilidad.misOrdenes
+                        }
+                        element={<MyOrders />}
+                      />
                     </OrderProvider>
                   </ProductProvider>
                 </BasicTablesProvider>
@@ -49,7 +63,12 @@ export const UserRoutes = () => {
                 <BasicTablesProvider>
                   <ProductProvider>
                     <OrderProvider>
-                      <TeamOrders />
+                      <ProtectedRoute
+                        allowedRoles={
+                          PermissionsSections.contabilidad.ordenesEquipo
+                        }
+                        element={<TeamOrders />}
+                      />
                     </OrderProvider>
                   </ProductProvider>
                 </BasicTablesProvider>
@@ -61,7 +80,10 @@ export const UserRoutes = () => {
                 <BasicTablesProvider>
                   <ProductProvider>
                     <OrderProvider>
-                      <Orders />
+                      <ProtectedRoute
+                        allowedRoles={PermissionsSections.contabilidad.ordenes}
+                        element={<Orders />}
+                      />
                     </OrderProvider>
                   </ProductProvider>
                 </BasicTablesProvider>

@@ -28,6 +28,8 @@ export default function AddProduct({ nro_orden = 0 }: DetailOrderProps) {
     removeProduct,
     handlerUpdateProduct,
     resetProducts,
+    changeStateButton,
+    disabledButton,
   } = useOrderContext();
 
   // Traer los datos detallados de los productos
@@ -38,11 +40,14 @@ export default function AddProduct({ nro_orden = 0 }: DetailOrderProps) {
 
   const handlerAddProducts = async () => {
     try {
+      changeStateButton(true);
       await handlerUpdateProduct(nro_orden, setOpen);
       await getProductsReport();
     } catch (error) {
       console.error("Error al añadir los productos: ", error);
       throw error;
+    } finally {
+      changeStateButton(false);
     }
   };
 
@@ -92,7 +97,9 @@ export default function AddProduct({ nro_orden = 0 }: DetailOrderProps) {
 
         <DialogFooter>
           <Button
-            disabled={arrayProducts.length > 0 ? false : true}
+            disabled={
+              arrayProducts.length > 0 && !disabledButton ? false : true
+            }
             onClick={handlerAddProducts}
             className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
           >

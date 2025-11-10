@@ -7,7 +7,11 @@ import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTab
 import { medidas } from "@/shared/data/selectOptions";
 import { BsCartCheck, BsCartDash } from "react-icons/bs";
 import { FaRegCheckCircle } from "react-icons/fa";
-import { MdOutlineCancel, MdOutlinePending } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdOutlineCancel,
+  MdOutlinePending,
+} from "react-icons/md";
 import { useProductContext } from "../hooks/useProductContext";
 
 interface FormEditProductProps {
@@ -25,6 +29,8 @@ interface FormEditProductProps {
   ) => void;
   is_jefe?: boolean;
   is_gerencia?: boolean;
+  canChangeState?: boolean;
+  canEdit?: boolean;
 }
 
 export const FormEditProduct = ({
@@ -38,6 +44,8 @@ export const FormEditProduct = ({
   estado_detalle_compra = "",
   id_detalle_compra = 0,
   is_gerencia = false,
+  canChangeState = true,
+  canEdit = true,
 }: FormEditProductProps) => {
   // Configuración de la zona horaria
   dayjs.extend(utc);
@@ -48,7 +56,7 @@ export const FormEditProduct = ({
   const { categorias } = useBasicTablesContext();
 
   // Contexto de useProduct
-  const { setDetailProductState } = useProductContext();
+  const { setDetailProductState, deleteProduct } = useProductContext();
 
   return (
     <div className="flex items-center justify-around h-full w-full my-3 ">
@@ -101,9 +109,8 @@ export const FormEditProduct = ({
             </option>
           ))}
       </select>
-      <input
+      <textarea
         className="w-[30%] border-1 p-2 rounded-lg border-[#9D9D9D] text-[#484848]"
-        type="text"
         placeholder="Descripción (nombre, referencia, marca, etc)"
         value={descripcion_producto}
         onChange={(e) =>
@@ -146,9 +153,19 @@ export const FormEditProduct = ({
             Number(e.target.value)
           )
         }
-        disabled={is_jefe || (is_gerencia && true)}
+        disabled={(is_jefe || is_gerencia) && true}
       />
-      {is_jefe && (
+      {is_jefe || is_gerencia || (
+        <Button
+          onClick={() => deleteProduct(id_detalle_compra)}
+          disabled={canEdit ? false : true}
+          className="bg-[#D64550] text-[#ffff] hover:text-[#ffff] hover:bg-[#ab2d37] cursor-pointer px-10"
+        >
+          <MdDeleteOutline />
+          Eliminar
+        </Button>
+      )}
+      {is_jefe && canChangeState && (
         <>
           <Button
             onClick={() =>

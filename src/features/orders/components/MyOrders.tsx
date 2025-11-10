@@ -12,6 +12,7 @@ import { useProductContext } from "@/features/products/hooks/useProductContext";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
 import AddProduct from "@/features/products/components/modals/AddProduct";
 import { useAuthStore } from "@/shared/store/authStore";
+import ModalObservation from "./modals/ModalObservation";
 
 export const MyOrders = () => {
   // OrderContext -> data y funciones correspondientes a las órdenes
@@ -88,13 +89,13 @@ export const MyOrders = () => {
         {loadingOrders ? (
           <LoadingSpinner />
         ) : (
-          <table className="min-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
+          <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
             <thead className="bg-[#E8B7BA] text-white">
               <tr>
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3">Observaciones</th>
+                <th className="px-4 py-3 w-24">Observaciones</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -121,12 +122,25 @@ export const MyOrders = () => {
                     >
                       {order.estado_compra}
                     </td>
-                    <td className="px-4 py-2">{order.observaciones}</td>
                     <td className="px-4 py-2">
-                      <AddProduct nro_orden={order.id_orden_compra} />
+                      <ModalObservation
+                        nro_orden={order.id_orden_compra}
+                        observaciones={order.observaciones}
+                      />
                     </td>
+                    {order.estado_compra === "En proceso" && (
+                      <td className="px-4 py-2">
+                        <AddProduct nro_orden={order.id_orden_compra} />
+                      </td>
+                    )}
+
                     <td className="px-4 py-2">
-                      <DetailOrder nro_orden={order.id_orden_compra} />
+                      <DetailOrder
+                        nro_orden={order.id_orden_compra}
+                        canEdit={
+                          order.estado_compra === "En proceso" ? true : false
+                        }
+                      />
                     </td>
                   </tr>
                 ))}

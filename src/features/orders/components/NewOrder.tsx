@@ -24,6 +24,7 @@ export const NewOrder = () => {
     removeProduct,
     onChangeOrder,
     handlerSubmitOrder,
+    disabledButton,
   } = useOrderContext();
 
   const { dateSpanish } = useGlobalDataContext();
@@ -113,6 +114,7 @@ export const NewOrder = () => {
           <button
             className="flex items-center justify-center bg-[#82385D] text-xl font-medium text-[#E8B7BA] h-auto cursor-pointer py-3 px-6 rounded-xl"
             onClick={handlerSubmitOrder}
+            disabled={disabledButton}
           >
             <BsSendPlus className="mr-4" size={25} color="#E8B7BA" />
             Solicitar
