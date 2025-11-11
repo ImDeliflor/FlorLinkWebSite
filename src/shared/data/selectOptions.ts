@@ -2,10 +2,17 @@
 export const medidas = [
   "bultos",
   "c³",
-  "combo",
+  "cajas",
+  "combos",
   "centimetros",
   "costales",
+  "galones",
+  "gramos",
   "kilos",
+  "litros",
+  "m³",
   "metros",
+  "pacas",
+  "rollos",
   "unidades",
 ];
