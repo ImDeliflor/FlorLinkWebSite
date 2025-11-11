@@ -124,7 +124,8 @@ export const Orders = () => {
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3 w-50">Observaciones</th>
+                <th className="px-4 py-3 w-[25%]">Observaciones</th>
+                <th></th>
                 <th></th>
                 <th></th>
               </tr>

@@ -99,7 +99,7 @@ export const TeamOrders = () => {
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3 w-24">Observaciones</th>
+                <th className="px-4 py-3 w-[25%]">Observaciones</th>
                 <th></th>
                 <th></th>
                 <th></th>
