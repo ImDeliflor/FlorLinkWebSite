@@ -9,10 +9,13 @@ import {
   PermissionsSections,
 } from "../config/permissions";
 import { useProtectedElement } from "../hooks/useProtectedElement";
+import { BiStore } from "react-icons/bi";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [openDropdownContabilidad, setOpenDropdownContabilidad] =
+    useState(false);
+  const [openDropdownAlmacen, setOpenDropdownAlmacen] = useState(false);
 
   const { logout } = useAuthStore();
 
@@ -69,7 +72,9 @@ export const Navbar = () => {
               <li>
                 <button
                   type="button"
-                  onClick={() => setOpenDropdown(!openDropdown)}
+                  onClick={() =>
+                    setOpenDropdownContabilidad(!openDropdownContabilidad)
+                  }
                   className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
                 >
                   <MdAccountBalance size={23} />
@@ -78,7 +83,7 @@ export const Navbar = () => {
                   </span>
                   <svg
                     className={`w-3 h-3 transition-transform ${
-                      openDropdown ? "rotate-180" : ""
+                      openDropdownContabilidad ? "rotate-180" : ""
                     }`}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +101,7 @@ export const Navbar = () => {
                 </button>
 
                 {/* Submenú */}
-                {openDropdown && (
+                {openDropdownContabilidad && (
                   <ul className="py-2 space-y-2">
                     {/* elemento para las órdenes nuevas */}
                     {canAccess(PermissionsSections.contabilidad.nuevaOrden) && (
@@ -173,6 +178,123 @@ export const Navbar = () => {
                           }
                         >
                           Órdenes de compra
+                        </NavLink>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
+            {/* Dropdown para almacén */}
+            {canAccess(PermissionsDropdowns.almacen) && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdownAlmacen(!openDropdownAlmacen)}
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                >
+                  <BiStore size={23} />
+                  <span className="flex-1 ms-3 text-left whitespace-nowrap">
+                    Almacén
+                  </span>
+                  <svg
+                    className={`w-3 h-3 transition-transform ${
+                      openDropdownAlmacen ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+
+                {/* Submenú */}
+                {openDropdownAlmacen && (
+                  <ul className="py-2 space-y-2">
+                    {/* elemento para los productos de almacén */}
+                    {canAccess(
+                      PermissionsSections.almacen.productosAlmacen
+                    ) && (
+                      <li>
+                        <NavLink
+                          to="/store/products"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Productos
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {/* elemento para el inventario de almacén */}
+                    {canAccess(
+                      PermissionsSections.almacen.inventarioAlmacen
+                    ) && (
+                      <li>
+                        <NavLink
+                          to="/store/inventory"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Inventario
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {/* elemento para las entradas de almacén */}
+                    {canAccess(PermissionsSections.almacen.entradas) && (
+                      <li>
+                        <NavLink
+                          to="/shopping/team-orders"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Entradas
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {/* elemento para todas las órdenes */}
+                    {canAccess(PermissionsSections.almacen.salidas) && (
+                      <li>
+                        <NavLink
+                          to="/shopping/orders"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                        >
+                          Salidas
                         </NavLink>
                       </li>
                     )}

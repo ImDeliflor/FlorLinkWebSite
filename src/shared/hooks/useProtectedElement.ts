@@ -15,7 +15,6 @@ export const useProtectedElement = () => {
   };
 
   const esLiderGrupoColaborativo = () => {
-    console.log(esLider);
     // Superadmin puede acceder a todo
     if (userRole === 3) return true;
 
@@ -24,5 +23,11 @@ export const useProtectedElement = () => {
     return false;
   };
 
-  return { canAccess, esLiderGrupoColaborativo };
+  const esLiderGrupoColaborativoSinSA = () => {
+    if (esLider) return true;
+
+    return false;
+  };
+
+  return { canAccess, esLiderGrupoColaborativo, esLiderGrupoColaborativoSinSA };
 };

@@ -10,9 +10,9 @@ import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import DetailOrder from "./modals/DetailOrder";
 import { useProductContext } from "@/features/products/hooks/useProductContext";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
-import { BsHandThumbsDown } from "react-icons/bs";
-import { FaRegHandshake } from "react-icons/fa";
 import ModalObservation from "./modals/ModalObservation";
+import { MdOutlineCancelScheduleSend } from "react-icons/md";
+import ConfirmOrder from "./modals/ConfirmOrder";
 
 export const Orders = () => {
   // OrderContext -> data y funciones correspondientes a las órdenes
@@ -60,8 +60,7 @@ export const Orders = () => {
 
   const pendingOrders = filteredOrders.reduce(
     (acc, order) =>
-      order.aprobado_por != 134 &&
-      order.estado_compra == "En aprobación gerencial"
+      order.aprobado_por != 134 && order.estado_compra == "En proceso"
         ? acc + 1
         : acc,
     0
@@ -100,7 +99,7 @@ export const Orders = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center min-h-[70%] max-h-[50%] min-w-full bg-white p-5 rounded-[0.7rem]">
+      <div className="flex flex-col items-center min-h-[70%] max-h-[50%] min-w-full bg-white p-5 rounded-[0.7rem] ">
         <select
           value={estado}
           onChange={(e) => setEstado(e.target.value)}
@@ -108,117 +107,97 @@ export const Orders = () => {
         >
           <option value="Todos">Todos</option>
           <option value="En proceso">En proceso</option>
-          <option value="En aprobación gerencial">
-            En aprobación gerencial
-          </option>
-          <option value="Aprobado por gerencia">Aprobado por gerencia</option>
-          <option value="Rechazado por gerencia">Rechazado por gerencia</option>
-          <option value="Rechazado por lider">Rechazado por lider</option>
+          <option value="Aprobado">Aprobado</option>
+          <option value="Rechazado">Rechazado</option>
+          <option value="Confirmado">Confirmado</option>
+          <option value="Cerrado">Cerrado</option>
         </select>
         {loadingOrders ? (
           <LoadingSpinner />
         ) : (
-          <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
-            <thead className="bg-[#E8B7BA] text-white">
-              <tr>
-                <th className="px-4 py-3">#</th>
-                <th className="px-4 py-3">Fecha</th>
-                <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3 w-[25%]">Observaciones</th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order, index) => (
-                <tr
-                  key={index}
-                  className="border-t hover:bg-gray-50 transition border-[#d1d1d1]"
-                >
-                  <td className="px-4 py-2">{order.id_orden_compra}</td>
-                  <td className="px-4 py-2">{order.fecha}</td>
-                  <td
-                    className={`px-4 py-2 font-medium ${
-                      order.estado_compra === "Aprobado por gerencia"
-                        ? "text-[#207349]"
-                        : order.estado_compra === "Rechazado por gerencia" ||
-                          order.estado_compra === "Rechazado por lider"
-                        ? "text-[#b82834]"
-                        : "text-[#E9B44C]"
-                    }`}
-                  >
-                    {order.estado_compra}
-                  </td>
-                  <td className="px-4 py-2">
-                    <ModalObservation
-                      nro_orden={order.id_orden_compra}
-                      observaciones={order.observaciones}
-                      is_gerencia={true}
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <DetailOrder
-                      nro_orden={order.id_orden_compra}
-                      is_gerencia={true}
-                    />
-                  </td>
-                  {order.estado_compra === "En aprobación gerencial" && (
-                    <>
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() =>
-                            sendToApproval(
-                              {
-                                estado_compra: "Aprobado por gerencia",
-                                fecha_validacion_orden_compra: dayjs().format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                ),
-                              },
-                              "¡Orden aprobada!",
-                              order.id_orden_compra
-                            )
-                          }
-                          className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                        >
-                          <FaRegHandshake
-                            className="mr-2"
-                            size={20}
-                            color="#E8B7BA"
-                          />
-                          Aprobar
-                        </button>
-                      </td>
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() =>
-                            sendToApproval(
-                              {
-                                estado_compra: "Rechazado por gerencia",
-                                fecha_validacion_orden_compra: dayjs().format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                ),
-                              },
-                              "¡Orden rechazada!",
-                              order.id_orden_compra
-                            )
-                          }
-                          className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                        >
-                          <BsHandThumbsDown
-                            className="mr-2"
-                            size={20}
-                            color="#E8B7BA"
-                          />
-                          Rechazar
-                        </button>
-                      </td>
-                    </>
-                  )}
+          <div className="min-w-full max-w-full overflow-y-auto">
+            <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
+              <thead className="bg-[#E8B7BA] text-white sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3">#</th>
+                  <th className="px-4 py-3">Fecha</th>
+                  <th className="px-4 py-3">Estado</th>
+                  <th className="px-4 py-3 flex-1">Observaciones</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOrders.map((order, index) => (
+                  <tr
+                    key={index}
+                    className="border-t hover:bg-gray-50 transition border-[#d1d1d1]"
+                  >
+                    <td className="px-4 py-2">{order.id_orden_compra}</td>
+                    <td className="px-4 py-2">{order.fecha}</td>
+                    <td
+                      className={`px-4 py-2 font-medium ${
+                        order.estado_compra === "Aprobado" ||
+                        order.estado_compra === "Confirmado"
+                          ? "text-[#207349]"
+                          : order.estado_compra === "Rechazado" ||
+                            order.estado_compra === "Cerrado"
+                          ? "text-[#b82834]"
+                          : "text-[#E9B44C]"
+                      }`}
+                    >
+                      {order.estado_compra}
+                    </td>
+                    <td className="px-4 py-2">
+                      <ModalObservation
+                        nro_orden={order.id_orden_compra}
+                        observaciones={order.observaciones}
+                        is_gerencia={true}
+                      />
+                    </td>
+                    <td className="px-4 py-2">
+                      <DetailOrder
+                        nro_orden={order.id_orden_compra}
+                        is_gerencia={true}
+                      />
+                    </td>
+                    {order.estado_compra === "Aprobado" && (
+                      <>
+                        <td className="px-4 py-2">
+                          <ConfirmOrder nro_orden={order.id_orden_compra} />
+                        </td>
+                        <td className="px-4 py-2">
+                          <button
+                            onClick={() =>
+                              sendToApproval(
+                                {
+                                  estado_compra: "Cerrado",
+                                  fecha_validacion_orden_compra: dayjs().format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  ),
+                                },
+                                "¡Orden cerrada!",
+                                order.id_orden_compra
+                              )
+                            }
+                            className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                          >
+                            <MdOutlineCancelScheduleSend
+                              className="mr-2"
+                              size={20}
+                              color="#E8B7BA"
+                            />
+                            Cerrar
+                          </button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

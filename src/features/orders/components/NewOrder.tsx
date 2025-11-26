@@ -1,4 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/es"; // importar el idioma
 import { MdOutlineNoteAdd } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -13,6 +16,11 @@ import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTab
 import { useAuthStore } from "@/shared/store/authStore";
 
 export const NewOrder = () => {
+  // Configuración de la zona horaria
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.locale("es");
+
   // Contexto global del usuario logeado
   const { user } = useAuthStore();
 

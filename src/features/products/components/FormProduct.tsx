@@ -19,7 +19,7 @@ export const FormProduct = ({ _valor, index }: FormProductProps) => {
   return (
     <div
       key={index}
-      className="flex items-center justify-around h-full w-full my-3 "
+      className="flex items-center justify-around h-full w-full my-3"
     >
       <select
         id="default"

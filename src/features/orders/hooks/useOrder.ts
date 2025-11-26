@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { useAuthStore } from "@/shared/store/authStore";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
 
 const initialProduct: Product = {
   id_categoria: 24,
@@ -22,6 +23,8 @@ export const useOrder = () => {
   dayjs.extend(timezone);
   dayjs.locale("es");
 
+  const { esLiderGrupoColaborativoSinSA } = useProtectedElement();
+
   // Contexto global del usuario logeado
   const { user } = useAuthStore();
 
@@ -32,6 +35,7 @@ export const useOrder = () => {
     observaciones: "",
     solicitado_por: user?.id_usuario,
     aprobado_por: null,
+    precio_total: null,
     estado_compra: "En proceso",
   };
 
@@ -192,6 +196,23 @@ export const useOrder = () => {
 
         // Enviar todas las promesas de response_products
         await Promise.all(response_products);
+
+        // Cargar el estado de aprobado en caso de ser un jefe
+        if (esLiderGrupoColaborativoSinSA()) {
+          try {
+            await axios.put(`${API_BASE_URL}/orden-compra/${id_orden_compra}`, {
+              estado_compra: "Aprobado",
+              aprobado_por: 15, // Usuario de Don David
+              fecha_validacion_orden_compra: dayjs().format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+            });
+            getOrders();
+          } catch (error) {
+            console.log("Error al enviar la orden de compra: ", error);
+            throw error;
+          }
+        }
 
         Swal.fire({
           icon: "success",

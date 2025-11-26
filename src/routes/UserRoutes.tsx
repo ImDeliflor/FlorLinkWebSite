@@ -12,6 +12,7 @@ import { Orders } from "@/features/orders/components/Orders";
 import { Unauthorized } from "@/features/auth/components/Unauthorized";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PermissionsSections } from "@/shared/config/permissions";
+import { StoreProducts } from "@/features/store/StoreProducts";
 
 export const UserRoutes = () => {
   return (
@@ -87,6 +88,45 @@ export const UserRoutes = () => {
                     </OrderProvider>
                   </ProductProvider>
                 </BasicTablesProvider>
+              }
+            />
+            {/* Rutas para la sección de almacén */}
+            <Route
+              path="/store/products"
+              element={
+                <BasicTablesProvider>
+                  <ProtectedRoute
+                    allowedRoles={PermissionsSections.almacen.productosAlmacen}
+                    element={<StoreProducts />}
+                  />
+                </BasicTablesProvider>
+              }
+            />
+            <Route
+              path="/store/inventory"
+              element={
+                <ProtectedRoute
+                  allowedRoles={PermissionsSections.contabilidad.ordenes}
+                  element={<Orders />}
+                />
+              }
+            />
+            <Route
+              path="/store/orders"
+              element={
+                <ProtectedRoute
+                  allowedRoles={PermissionsSections.contabilidad.ordenes}
+                  element={<Orders />}
+                />
+              }
+            />
+            <Route
+              path="/store/orders"
+              element={
+                <ProtectedRoute
+                  allowedRoles={PermissionsSections.contabilidad.ordenes}
+                  element={<Orders />}
+                />
               }
             />
           </Routes>

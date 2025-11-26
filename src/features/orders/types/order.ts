@@ -8,10 +8,11 @@ export interface Order {
   aprobado_por?: number | null | undefined;
   estado_compra:
     | "En proceso"
-    | "En aprobación gerencial"
-    | "Aprobado por gerencia"
-    | "Rechazado por gerencia"
-    | "Rechazado por lider";
+    | "Aprobado"
+    | "Rechazado"
+    | "Confirmado"
+    | "Cerrado";
+  precio_total: number | null | undefined;
   fecha_validacion_orden_compra?: string;
 }
 
@@ -24,10 +25,11 @@ export interface UpdateOrder {
   aprobado_por?: number | null;
   estado_compra?:
     | "En proceso"
-    | "En aprobación gerencial"
-    | "Aprobado por gerencia"
-    | "Rechazado por gerencia"
-    | "Rechazado por lider";
+    | "Aprobado"
+    | "Rechazado"
+    | "Confirmado"
+    | "Cerrado";
+  precio_total?: number | null | undefined;
   fecha_validacion_orden_compra?: string;
 }
 

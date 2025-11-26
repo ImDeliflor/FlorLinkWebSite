@@ -93,126 +93,134 @@ export const TeamOrders = () => {
         {loadingOrders ? (
           <LoadingSpinner />
         ) : (
-          <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
-            <thead className="bg-[#E8B7BA] text-white">
-              <tr>
-                <th className="px-4 py-3">#</th>
-                <th className="px-4 py-3">Fecha</th>
-                <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3 w-[25%]">Observaciones</th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders
-                .filter(
-                  (order) =>
-                    order.id_grupo_colaborativo ==
-                    user?.id_jefe_grupo_colaborativo
-                )
-                .map((order, index) => (
-                  <tr
-                    key={index}
-                    className="border-t hover:bg-gray-50 transition border-[#d1d1d1]"
-                  >
-                    <td className="px-4 py-2">{order.id_orden_compra}</td>
-                    <td className="px-4 py-2">{order.fecha}</td>
-                    <td
-                      className={`px-4 py-2 font-medium ${
-                        order.estado_compra === "Aprobado por gerencia"
-                          ? "text-[#207349]"
-                          : order.estado_compra === "Rechazado por gerencia" ||
-                            order.estado_compra === "Rechazado por lider"
-                          ? "text-[#b82834]"
-                          : "text-[#E9B44C]"
-                      }`}
+          <div className="min-w-full max-w-full overflow-y-auto">
+            <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
+              <thead className="bg-[#E8B7BA] text-white sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3">#</th>
+                  <th className="px-4 py-3">Fecha</th>
+                  <th className="px-4 py-3">Estado</th>
+                  <th className="px-4 py-3 flex-1">Observaciones</th>
+                  <th className="px-4 py-3">Precio Total</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders
+                  .filter(
+                    (order) =>
+                      order.id_grupo_colaborativo ==
+                      user?.id_jefe_grupo_colaborativo
+                  )
+                  .map((order, index) => (
+                    <tr
+                      key={index}
+                      className="border-t hover:bg-gray-50 transition border-[#d1d1d1]"
                     >
-                      {order.estado_compra}
-                    </td>
-                    <td className="px-4 py-2">
-                      <ModalObservation
-                        nro_orden={order.id_orden_compra}
-                        observaciones={order.observaciones}
-                        is_jefe={true}
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <DetailOrder
-                        nro_orden={order.id_orden_compra}
-                        is_jefe={true}
-                        canChangeState={
-                          order.estado_compra === "En proceso" ? true : false
-                        }
-                      />
-                    </td>
-                    {order.estado_compra === "En proceso" && (
-                      <>
-                        <td className="px-4 py-2">
-                          <button
-                            onClick={() =>
-                              sendToApproval(
-                                {
-                                  estado_compra: "En aprobación gerencial",
-                                  aprobado_por: user?.id_usuario,
-                                },
-                                "¡Orden enviada para su última aprobación!",
-                                order.id_orden_compra,
-                                productReport.filter(
-                                  (product) =>
-                                    product.nro_orden_compra ==
-                                    order.id_orden_compra
-                                ),
-                                "Aprobar"
-                              )
-                            }
-                            className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                          >
-                            <FaRegHandPointUp
-                              className="mr-2"
-                              size={20}
-                              color="#E8B7BA"
-                            />
-                            Enviar a gerencia
-                          </button>
-                        </td>
-                        <td className="px-4 py-2">
-                          <button
-                            onClick={() =>
-                              sendToApproval(
-                                {
-                                  estado_compra: "Rechazado por lider",
-                                  fecha_validacion_orden_compra: dayjs().format(
-                                    "YYYY-MM-DD HH:mm:ss"
+                      <td className="px-4 py-2">{order.id_orden_compra}</td>
+                      <td className="px-4 py-2">{order.fecha}</td>
+                      <td
+                        className={`px-4 py-2 font-medium ${
+                          order.estado_compra === "Aprobado" ||
+                          order.estado_compra === "Confirmado"
+                            ? "text-[#207349]"
+                            : order.estado_compra === "Rechazado" ||
+                              order.estado_compra === "Cerrado"
+                            ? "text-[#b82834]"
+                            : "text-[#E9B44C]"
+                        }`}
+                      >
+                        {order.estado_compra}
+                      </td>
+                      <td className="px-4 py-2">
+                        <ModalObservation
+                          nro_orden={order.id_orden_compra}
+                          observaciones={order.observaciones}
+                          is_jefe={true}
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        $ {order.precio_total ? order.precio_total : "0"}
+                      </td>
+                      <td className="px-4 py-2">
+                        <DetailOrder
+                          nro_orden={order.id_orden_compra}
+                          is_jefe={true}
+                          canChangeState={
+                            order.estado_compra === "En proceso" ? true : false
+                          }
+                        />
+                      </td>
+                      {order.estado_compra === "En proceso" && (
+                        <>
+                          <td className="px-4 py-2">
+                            <button
+                              onClick={() =>
+                                sendToApproval(
+                                  {
+                                    estado_compra: "Aprobado",
+                                    aprobado_por: user?.id_usuario,
+                                    fecha_validacion_orden_compra:
+                                      dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                                  },
+                                  "¡Orden enviada para su última aprobación!",
+                                  order.id_orden_compra,
+                                  productReport.filter(
+                                    (product) =>
+                                      product.nro_orden_compra ==
+                                      order.id_orden_compra
                                   ),
-                                },
-                                "¡Orden rechazada!",
-                                order.id_orden_compra,
-                                productReport.filter(
-                                  (product) =>
-                                    product.nro_orden_compra ==
-                                    order.id_orden_compra
-                                ),
-                                "Rechazar"
-                              )
-                            }
-                            className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                          >
-                            <FaRegHandPointDown
-                              className="mr-2"
-                              size={20}
-                              color="#E8B7BA"
-                            />
-                            Rechazar orden
-                          </button>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                                  "Aprobar"
+                                )
+                              }
+                              className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                            >
+                              <FaRegHandPointUp
+                                className="mr-2"
+                                size={20}
+                                color="#E8B7BA"
+                              />
+                              Aprobar orden
+                            </button>
+                          </td>
+                          <td className="px-4 py-2">
+                            <button
+                              onClick={() =>
+                                sendToApproval(
+                                  {
+                                    estado_compra: "Rechazado",
+                                    fecha_validacion_orden_compra:
+                                      dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                                  },
+                                  "¡Orden rechazada!",
+                                  order.id_orden_compra,
+                                  productReport.filter(
+                                    (product) =>
+                                      product.nro_orden_compra ==
+                                      order.id_orden_compra
+                                  ),
+                                  "Rechazar"
+                                )
+                              }
+                              className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                            >
+                              <FaRegHandPointDown
+                                className="mr-2"
+                                size={20}
+                                color="#E8B7BA"
+                              />
+                              Rechazar orden
+                            </button>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
