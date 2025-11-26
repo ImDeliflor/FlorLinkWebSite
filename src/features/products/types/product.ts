@@ -7,6 +7,7 @@ export interface Product {
   unidad_medida: string;
   cantidad_solicitada: number;
   estado_detalle_compra: "Pendiente" | "Aprobado" | "Rechazado";
+  fecha_validacion_detalle_compra?: string;
 }
 
 // Interface para modificar los productos

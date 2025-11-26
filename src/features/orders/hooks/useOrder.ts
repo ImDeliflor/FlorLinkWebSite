@@ -173,32 +173,33 @@ export const useOrder = () => {
 
       // Validar que el id de la orden ya exista en la base de datos
       if (id_orden_compra != 0) {
-        const response_products = arrayProducts.map(async (product) => {
-          // try para el envío de los datos a la API
-          try {
-            await axios.post(`${API_BASE_URL}/detalle-compra`, {
-              ...product,
-              id_orden_compra: id_orden_compra,
-            });
-            console.log(
-              "Producto ",
-              product.descripcion_producto,
-              " guardado con éxito"
-            );
-          } catch (error) {
-            console.error(
-              "Error al guardar el producto: ",
-              product.descripcion_producto
-            );
-            throw error;
-          }
-        });
-
-        // Enviar todas las promesas de response_products
-        await Promise.all(response_products);
-
         // Cargar el estado de aprobado en caso de ser un jefe
         if (esLiderGrupoColaborativoSinSA()) {
+          // Enviar cada producto con estado ya aprobado y fecha de validación
+          const response_products = arrayProducts.map(async (product) => {
+            // try para el envío de los datos a la API
+            try {
+              await axios.post(`${API_BASE_URL}/detalle-compra`, {
+                ...product,
+                id_orden_compra: id_orden_compra,
+                estado_detalle_compra: "Aprobado",
+                fecha_validacion_detalle_compra: dayjs().format(
+                  "YYYY-MM-DD HH:mm:ss"
+                ),
+              });
+            } catch (error) {
+              console.error(
+                "Error al guardar el producto: ",
+                product.descripcion_producto
+              );
+              throw error;
+            }
+          });
+
+          // Enviar todas las promesas de response_products
+          await Promise.all(response_products);
+
+          // Cambiar el estado de toda la orden a aprobado
           try {
             await axios.put(`${API_BASE_URL}/orden-compra/${id_orden_compra}`, {
               estado_compra: "Aprobado",
@@ -209,9 +210,32 @@ export const useOrder = () => {
             });
             getOrders();
           } catch (error) {
-            console.log("Error al enviar la orden de compra: ", error);
+            console.log(
+              "Error al enviar la orden de compra ya aprobada: ",
+              error
+            );
             throw error;
           }
+        } else {
+          // Enviar los productos en el formato base
+          const response_products = arrayProducts.map(async (product) => {
+            // try para el envío de los datos a la API
+            try {
+              await axios.post(`${API_BASE_URL}/detalle-compra`, {
+                ...product,
+                id_orden_compra: id_orden_compra,
+              });
+            } catch (error) {
+              console.error(
+                "Error al guardar el producto: ",
+                product.descripcion_producto
+              );
+              throw error;
+            }
+          });
+
+          // Enviar todas las promesas de response_products
+          await Promise.all(response_products);
         }
 
         Swal.fire({

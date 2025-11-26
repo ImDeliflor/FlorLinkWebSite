@@ -12,7 +12,7 @@ import { useProductContext } from "@/features/products/hooks/useProductContext";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
 import ModalObservation from "./modals/ModalObservation";
 import { MdOutlineCancelScheduleSend } from "react-icons/md";
-import ConfirmOrder from "./modals/ConfirmOrder";
+import { FaRegHandshake } from "react-icons/fa";
 
 export const Orders = () => {
   // OrderContext -> data y funciones correspondientes a las órdenes
@@ -163,35 +163,56 @@ export const Orders = () => {
                       />
                     </td>
                     {order.estado_compra === "Aprobado" && (
-                      <>
-                        <td className="px-4 py-2">
-                          <ConfirmOrder nro_orden={order.id_orden_compra} />
-                        </td>
-                        <td className="px-4 py-2">
-                          <button
-                            onClick={() =>
-                              sendToApproval(
-                                {
-                                  estado_compra: "Cerrado",
-                                  fecha_validacion_orden_compra: dayjs().format(
-                                    "YYYY-MM-DD HH:mm:ss"
-                                  ),
-                                },
-                                "¡Orden cerrada!",
-                                order.id_orden_compra
-                              )
-                            }
-                            className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                          >
-                            <MdOutlineCancelScheduleSend
-                              className="mr-2"
-                              size={20}
-                              color="#E8B7BA"
-                            />
-                            Cerrar
-                          </button>
-                        </td>
-                      </>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() =>
+                            sendToApproval(
+                              {
+                                estado_compra: "Confirmado",
+                                fecha_validacion_orden_compra: dayjs().format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                ),
+                              },
+                              "¡Orden confirmada!",
+                              order.id_orden_compra
+                            )
+                          }
+                          className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                        >
+                          <FaRegHandshake
+                            className="mr-2"
+                            size={20}
+                            color="#E8B7BA"
+                          />
+                          Confirmar
+                        </button>
+                      </td>
+                    )}
+                    {order.estado_compra === "En proceso" && (
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() =>
+                            sendToApproval(
+                              {
+                                estado_compra: "Cerrado",
+                                fecha_validacion_orden_compra: dayjs().format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                ),
+                              },
+                              "¡Orden cerrada!",
+                              order.id_orden_compra
+                            )
+                          }
+                          className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                        >
+                          <MdOutlineCancelScheduleSend
+                            className="mr-2"
+                            size={20}
+                            color="#E8B7BA"
+                          />
+                          Cerrar
+                        </button>
+                      </td>
                     )}
                   </tr>
                 ))}
