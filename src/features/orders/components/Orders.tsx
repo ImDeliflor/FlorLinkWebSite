@@ -188,32 +188,33 @@ export const Orders = () => {
                         </button>
                       </td>
                     )}
-                    {order.estado_compra === "En proceso" && (
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() =>
-                            sendToApproval(
-                              {
-                                estado_compra: "Cerrado",
-                                fecha_validacion_orden_compra: dayjs().format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                ),
-                              },
-                              "¡Orden cerrada!",
-                              order.id_orden_compra
-                            )
-                          }
-                          className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                        >
-                          <MdOutlineCancelScheduleSend
-                            className="mr-2"
-                            size={20}
-                            color="#E8B7BA"
-                          />
-                          Cerrar
-                        </button>
-                      </td>
-                    )}
+                    {order.estado_compra === "En proceso" &&
+                      dayjs().day() === 2 && (
+                        <td className="px-4 py-2">
+                          <button
+                            onClick={() =>
+                              sendToApproval(
+                                {
+                                  estado_compra: "Cerrado",
+                                  fecha_validacion_orden_compra: dayjs().format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  ),
+                                },
+                                "¡Orden cerrada!",
+                                order.id_orden_compra
+                              )
+                            }
+                            className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                          >
+                            <MdOutlineCancelScheduleSend
+                              className="mr-2"
+                              size={20}
+                              color="#E8B7BA"
+                            />
+                            Cerrar
+                          </button>
+                        </td>
+                      )}
                   </tr>
                 ))}
               </tbody>

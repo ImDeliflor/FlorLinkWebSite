@@ -153,69 +153,70 @@ export const TeamOrders = () => {
                           }
                         />
                       </td>
-                      {order.estado_compra === "En proceso" && (
-                        <>
-                          <td className="px-4 py-2">
-                            <button
-                              onClick={() =>
-                                sendToApproval(
-                                  {
-                                    estado_compra: "Aprobado",
-                                    aprobado_por: user?.id_usuario,
-                                    fecha_validacion_orden_compra:
-                                      dayjs().format("YYYY-MM-DD HH:mm:ss"),
-                                  },
-                                  "¡Orden enviada para su última aprobación!",
-                                  order.id_orden_compra,
-                                  productReport.filter(
-                                    (product) =>
-                                      product.nro_orden_compra ==
-                                      order.id_orden_compra
-                                  ),
-                                  "Aprobar"
-                                )
-                              }
-                              className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                            >
-                              <FaRegHandPointUp
-                                className="mr-2"
-                                size={20}
-                                color="#E8B7BA"
-                              />
-                              Aprobar orden
-                            </button>
-                          </td>
-                          <td className="px-4 py-2">
-                            <button
-                              onClick={() =>
-                                sendToApproval(
-                                  {
-                                    estado_compra: "Rechazado",
-                                    fecha_validacion_orden_compra:
-                                      dayjs().format("YYYY-MM-DD HH:mm:ss"),
-                                  },
-                                  "¡Orden rechazada!",
-                                  order.id_orden_compra,
-                                  productReport.filter(
-                                    (product) =>
-                                      product.nro_orden_compra ==
-                                      order.id_orden_compra
-                                  ),
-                                  "Rechazar"
-                                )
-                              }
-                              className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
-                            >
-                              <FaRegHandPointDown
-                                className="mr-2"
-                                size={20}
-                                color="#E8B7BA"
-                              />
-                              Rechazar orden
-                            </button>
-                          </td>
-                        </>
-                      )}
+                      {order.estado_compra === "En proceso" &&
+                        dayjs().day() === 2 && (
+                          <>
+                            <td className="px-4 py-2">
+                              <button
+                                onClick={() =>
+                                  sendToApproval(
+                                    {
+                                      estado_compra: "Aprobado",
+                                      aprobado_por: user?.id_usuario,
+                                      fecha_validacion_orden_compra:
+                                        dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                                    },
+                                    "¡Orden enviada para su última aprobación!",
+                                    order.id_orden_compra,
+                                    productReport.filter(
+                                      (product) =>
+                                        product.nro_orden_compra ==
+                                        order.id_orden_compra
+                                    ),
+                                    "Aprobar"
+                                  )
+                                }
+                                className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                              >
+                                <FaRegHandPointUp
+                                  className="mr-2"
+                                  size={20}
+                                  color="#E8B7BA"
+                                />
+                                Aprobar orden
+                              </button>
+                            </td>
+                            <td className="px-4 py-2">
+                              <button
+                                onClick={() =>
+                                  sendToApproval(
+                                    {
+                                      estado_compra: "Rechazado",
+                                      fecha_validacion_orden_compra:
+                                        dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                                    },
+                                    "¡Orden rechazada!",
+                                    order.id_orden_compra,
+                                    productReport.filter(
+                                      (product) =>
+                                        product.nro_orden_compra ==
+                                        order.id_orden_compra
+                                    ),
+                                    "Rechazar"
+                                  )
+                                }
+                                className="flex items-center justify-center bg-[#82385D] font-medium text-[#E8B7BA] h-auto cursor-pointer p-3 rounded-xl"
+                              >
+                                <FaRegHandPointDown
+                                  className="mr-2"
+                                  size={20}
+                                  color="#E8B7BA"
+                                />
+                                Rechazar orden
+                              </button>
+                            </td>
+                          </>
+                        )}
                     </tr>
                   ))}
               </tbody>
