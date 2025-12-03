@@ -189,7 +189,7 @@ export const Orders = () => {
                       </td>
                     )}
                     {order.estado_compra === "En proceso" &&
-                      dayjs().day() === 2 && (
+                      dayjs().day() === 3 && (
                         <td className="px-4 py-2">
                           <button
                             onClick={() =>
