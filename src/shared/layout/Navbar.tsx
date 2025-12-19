@@ -265,7 +265,7 @@ export const Navbar = () => {
                     {canAccess(PermissionsSections.almacen.entradas) && (
                       <li>
                         <NavLink
-                          to="/shopping/team-orders"
+                          to="/store/entries"
                           className={({ isActive }) =>
                             `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
      ${
@@ -284,7 +284,7 @@ export const Navbar = () => {
                     {canAccess(PermissionsSections.almacen.salidas) && (
                       <li>
                         <NavLink
-                          to="/shopping/orders"
+                          to="/store/issues"
                           className={({ isActive }) =>
                             `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
      ${
@@ -306,7 +306,7 @@ export const Navbar = () => {
           <div className="w-full flex items-center justify-center">
             <button
               className="flex items-center justify-center bg-[#E8B7BA] text-[15px] font-medium text-[#82385D] h-auto cursor-pointer py-3 px-6 rounded-xl mt-5"
-              onClick={logout}
+              onClick={() => logout()}
             >
               <CiLogout className="mr-4" size={20} color="#82385D" />
               Cerrar sesión

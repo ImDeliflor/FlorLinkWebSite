@@ -12,7 +12,16 @@ import { Orders } from "@/features/orders/components/Orders";
 import { Unauthorized } from "@/features/auth/components/Unauthorized";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PermissionsSections } from "@/shared/config/permissions";
-import { StoreProducts } from "@/features/store/StoreProducts";
+import { StoreProducts } from "@/features/store/productos/components/StoreProducts";
+import { StoreProductsProvider } from "@/features/store/productos/context/StoreProductsProvider";
+import { StoreInventory } from "@/features/store/inventario/components/StoreInventory";
+import { StoreInventoryProvider } from "@/features/store/inventario/context/StoreInventoryProvider";
+import { StoreEntriesProvider } from "@/features/store/entradas/context/StoreEntriesProvider";
+import { StorePendEntriesProvider } from "@/features/store/entradas_pendientes/context/StorePendEntriesProvider";
+import { LoteProductsProvider } from "@/features/store/lote_productos/context/LoteProductsProvider";
+import { StoreIssuesProvider } from "@/features/store/salidas/context/StoreIssuesProvider";
+import { StoreEntries } from "@/features/store/entradas/components/StoreEntries";
+import { StoreIssues } from "@/features/store/salidas/components/StoreIssues";
 
 export const UserRoutes = () => {
   return (
@@ -94,39 +103,87 @@ export const UserRoutes = () => {
             <Route
               path="/store/products"
               element={
-                <BasicTablesProvider>
-                  <ProtectedRoute
-                    allowedRoles={PermissionsSections.almacen.productosAlmacen}
-                    element={<StoreProducts />}
-                  />
-                </BasicTablesProvider>
+                <StorePendEntriesProvider>
+                  <StoreInventoryProvider>
+                    <StoreEntriesProvider>
+                      <StoreProductsProvider>
+                        <BasicTablesProvider>
+                          <ProtectedRoute
+                            allowedRoles={
+                              PermissionsSections.almacen.productosAlmacen
+                            }
+                            element={<StoreProducts />}
+                          />
+                        </BasicTablesProvider>
+                      </StoreProductsProvider>
+                    </StoreEntriesProvider>
+                  </StoreInventoryProvider>
+                </StorePendEntriesProvider>
               }
             />
             <Route
               path="/store/inventory"
               element={
-                <ProtectedRoute
-                  allowedRoles={PermissionsSections.contabilidad.ordenes}
-                  element={<Orders />}
-                />
+                <StoreIssuesProvider>
+                  <LoteProductsProvider>
+                    <StorePendEntriesProvider>
+                      <StoreInventoryProvider>
+                        <BasicTablesProvider>
+                          <ProtectedRoute
+                            allowedRoles={
+                              PermissionsSections.almacen.inventarioAlmacen
+                            }
+                            element={<StoreInventory />}
+                          />
+                        </BasicTablesProvider>
+                      </StoreInventoryProvider>
+                    </StorePendEntriesProvider>
+                  </LoteProductsProvider>
+                </StoreIssuesProvider>
               }
             />
             <Route
-              path="/store/orders"
+              path="/store/entries"
               element={
-                <ProtectedRoute
-                  allowedRoles={PermissionsSections.contabilidad.ordenes}
-                  element={<Orders />}
-                />
+                <StoreEntriesProvider>
+                  <StoreIssuesProvider>
+                    <LoteProductsProvider>
+                      <StorePendEntriesProvider>
+                        <StoreInventoryProvider>
+                          <BasicTablesProvider>
+                            <ProtectedRoute
+                              allowedRoles={
+                                PermissionsSections.almacen.entradas
+                              }
+                              element={<StoreEntries />}
+                            />
+                          </BasicTablesProvider>
+                        </StoreInventoryProvider>
+                      </StorePendEntriesProvider>
+                    </LoteProductsProvider>
+                  </StoreIssuesProvider>
+                </StoreEntriesProvider>
               }
             />
             <Route
-              path="/store/orders"
+              path="/store/issues"
               element={
-                <ProtectedRoute
-                  allowedRoles={PermissionsSections.contabilidad.ordenes}
-                  element={<Orders />}
-                />
+                <StoreEntriesProvider>
+                  <StoreIssuesProvider>
+                    <LoteProductsProvider>
+                      <StorePendEntriesProvider>
+                        <StoreInventoryProvider>
+                          <BasicTablesProvider>
+                            <ProtectedRoute
+                              allowedRoles={PermissionsSections.almacen.salidas}
+                              element={<StoreIssues />}
+                            />
+                          </BasicTablesProvider>
+                        </StoreInventoryProvider>
+                      </StorePendEntriesProvider>
+                    </LoteProductsProvider>
+                  </StoreIssuesProvider>
+                </StoreEntriesProvider>
               }
             />
           </Routes>

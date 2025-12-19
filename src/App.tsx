@@ -1,11 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Navigate, Route, Routes } from "react-router-dom";
 import { UserRoutes } from "./routes/UserRoutes";
 
 import { LoginPage } from "./features/auth/components/LoginPage";
 import { useAuthStore } from "./shared/store/authStore";
+import { useEffect } from "react";
 
 export const App = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, checkToken } = useAuthStore();
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   return (
     <>

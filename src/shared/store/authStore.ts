@@ -58,8 +58,9 @@ interface AuthState {
   user: UserData | null;
   isAuthenticated: boolean;
   login: (token: string) => Promise<void>;
-  logout: () => void;
+  logout: (message?: string) => void;
   fetchUserData: (token: string) => Promise<void>;
+  checkToken: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -74,8 +75,38 @@ export const useAuthStore = create<AuthState>()(
         await get().fetchUserData(newToken);
       },
 
-      logout: () => {
+      logout: (message?: string) => {
+        if (message) {
+          alert(message);
+        }
+
         set({ token: null, user: null, isAuthenticated: false });
+      },
+
+      checkToken: () => {
+        const token = get().token;
+        if (!token) return false;
+
+        try {
+          const decoded = jwtDecode<TokenPayload>(token);
+          const currentTime = Math.floor(Date.now() / 1000);
+
+          if (decoded.exp < currentTime) {
+            get().logout("Tu sesión ha expirado...");
+            return false;
+          }
+
+          // Si el token es válido pero no se ha cargado el user (por persist)
+          if (!get().user) {
+            get().fetchUserData(token);
+          }
+
+          return true;
+        } catch (error) {
+          console.error("Error al validar token:", error);
+          get().logout();
+          return false;
+        }
       },
 
       fetchUserData: async (tokenToUse: string) => {

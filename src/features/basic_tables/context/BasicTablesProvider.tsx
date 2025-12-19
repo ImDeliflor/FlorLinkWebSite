@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useBasicTables } from "../hooks/BasicTables";
+import { useBasicTables } from "../hooks/useBasicTables";
 import { BasicTablesContext } from "./BasicTablesContext";
 
 export const BasicTablesProvider = ({ children }: { children: ReactNode }) => {

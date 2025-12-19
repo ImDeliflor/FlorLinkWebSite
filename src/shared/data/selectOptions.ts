@@ -16,3 +16,5 @@ export const medidas = [
   "rollos",
   "unidades",
 ];
+
+export const categoriasToxicologicas = ["I", "II", "III", "IV", "No aplica"];

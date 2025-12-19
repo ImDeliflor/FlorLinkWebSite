@@ -93,10 +93,12 @@ export const MyOrders = () => {
             <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
               <thead className="bg-[#E8B7BA] text-white sticky top-0 z-10">
                 <tr>
-                  <th className="px-4 py-3">#</th>
-                  <th className="px-4 py-3">Fecha</th>
-                  <th className="px-4 py-3">Estado</th>
-                  <th className="px-4 py-3 flex-1">Observaciones</th>
+                  <th className="px-4 py-3 text-[#82385D]">#</th>
+                  <th className="px-4 py-3 text-[#82385D]">Fecha</th>
+                  <th className="px-4 py-3 text-[#82385D]">Estado</th>
+                  <th className="px-4 py-3 flex-1 text-[#82385D]">
+                    Observaciones
+                  </th>
                   <th></th>
                   <th></th>
                 </tr>

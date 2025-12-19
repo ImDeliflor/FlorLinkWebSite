@@ -5,3 +5,13 @@ export interface Categoria {
 }
 
 export type Categorias = Categoria[];
+
+export interface Laboratorio {
+  id_laboratorio: number;
+  nombre_laboratorio: string;
+}
+
+export interface CentroCostos {
+  id_centro_costos: number;
+  nombre_centro_costos: string;
+}
