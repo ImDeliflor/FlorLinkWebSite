@@ -29,7 +29,7 @@ interface IssueProps {
   tiene_lote?: boolean;
 }
 
-export default function StoreIssueModal({
+export default function StoreIssueModalCOPY({
   inventory,
   tiene_lote = false,
 }: IssueProps) {
@@ -177,36 +177,49 @@ export default function StoreIssueModal({
                     .map((lote, index) => (
                       <tr
                         key={index}
-                        className={
-                          "cursor-pointer transition hover:bg-gray-100 hover:shadow-sm"
-                        }
+                        className={` ${
+                          index === 0
+                            ? "cursor-pointer transition hover:bg-gray-100 hover:shadow-sm"
+                            : ""
+                        }  `}
                         onClick={() => {
-                          // if (index === 0) {
-                          //   setSelectedLote((prev) => ({
-                          //     ...prev,
-                          //     id_lote_producto: lote.id_lote_producto ?? 0,
-                          //     nro_lote: lote.nro_lote,
-                          //     cantidad_disponible_lote:
-                          //       lote.cantidad_disponible_lote,
-                          //   }));
-                          // }
-                          setSelectedLote((prev) => ({
-                            ...prev,
-                            id_lote_producto: lote.id_lote_producto ?? 0,
-                            nro_lote: lote.nro_lote,
-                            cantidad_disponible_lote:
-                              lote.cantidad_disponible_lote,
-                          }));
+                          if (index === 0) {
+                            setSelectedLote((prev) => ({
+                              ...prev,
+                              id_lote_producto: lote.id_lote_producto ?? 0,
+                              nro_lote: lote.nro_lote,
+                              cantidad_disponible_lote:
+                                lote.cantidad_disponible_lote,
+                            }));
+                          }
                         }}
                       >
-                        <td className="px-4 py-2">{lote.nro_lote}</td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
+                          {lote.nro_lote}
+                        </td>
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {dayjs(lote.fecha_vencimiento).format("DD/MM/YYYY")}
                         </td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {lote.categoria_toxicologica}
                         </td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {lote.cantidad_disponible_lote}
                         </td>
                       </tr>
