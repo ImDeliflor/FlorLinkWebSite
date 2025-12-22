@@ -6,7 +6,7 @@ import { LoginPage } from "./features/auth/components/LoginPage";
 import { useAuthStore } from "./shared/store/authStore";
 import { useEffect } from "react";
 import { APP_MAINTENANCE } from "./config/apiConfig";
-import { MaintenancePage } from "./shared/components/MaintenancePAge";
+import { MaintenancePageT } from "./shared/components/MaintenancePageT";
 
 export const App = () => {
   const { isAuthenticated, checkToken } = useAuthStore();
@@ -17,7 +17,7 @@ export const App = () => {
 
   // MAINTENANCE MODE
   if (APP_MAINTENANCE) {
-    return <MaintenancePage />;
+    return <MaintenancePageT />;
   }
 
   return (
