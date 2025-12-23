@@ -244,6 +244,7 @@ export const StoreProducts = () => {
               <tr>
                 <th className="px-4 py-3 text-[#82385D]">Cod Producto</th>
                 <th className="px-4 py-3 text-[#82385D]">Categoria</th>
+                <th className="px-4 py-3 text-[#82385D]">Categoria Costo</th>
                 <th className="px-4 py-3 text-[#82385D]">Descripción</th>
                 <th className="px-4 py-3 text-[#82385D]">Unidad de medida</th>
                 <th className="px-4 py-3"></th>
@@ -255,6 +256,9 @@ export const StoreProducts = () => {
                   <td className="px-4 py-2">{product.cod_producto}</td>
                   <td className="px-4 py-2">
                     {product.nombre_categoria_producto}
+                  </td>
+                  <td className="px-4 py-2">
+                    {product.nombre_categoria_costo}
                   </td>
                   <td className="px-4 py-2">{product.descripcion}</td>
                   <td className="px-4 py-2">{product.unidad_medida}</td>

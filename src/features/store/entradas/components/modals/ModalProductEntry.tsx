@@ -21,6 +21,7 @@ import { useAuthStore } from "@/shared/store/authStore";
 import { useStoreInventoryContext } from "@/features/store/inventario/hooks/useStoreInventoryContext";
 import { initialValueEntry } from "../../utils/initialValues";
 import { useStorePendEntriesContext } from "@/features/store/entradas_pendientes/hooks/useStorePendEntriesContext";
+import Swal from "sweetalert2";
 
 interface ProductEntryProps {
   product: StoreProductReport;
@@ -50,6 +51,9 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
 
+  // useState para habilitar/deshabilitar
+  const [disabledButton, setDisabledButton] = useState(false);
+
   // useState para el estado del mensaje de error
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -61,68 +65,83 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
 
   // Función para guardar la entrada
   const handlerSaveEntry = async () => {
-    // Almacenar la data de la entrada en una constante
-    const newEntry = {
-      ...dataEntry,
-      fecha_entrada: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-      cod_producto: product.cod_producto ? product.cod_producto : 0,
-      created_by: user?.id_usuario ? user?.id_usuario : 0,
-    };
+    try {
+      setDisabledButton(true);
+      // Almacenar la data de la entrada en una constante
+      const newEntry = {
+        ...dataEntry,
+        fecha_entrada: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        cod_producto: product.cod_producto ? product.cod_producto : 0,
+        created_by: user?.id_usuario ? user?.id_usuario : 0,
+      };
 
-    // Validar que todos los campos estén llenos exceptuando "observacion"
-    const isValid = Object.entries(dataEntry)
-      .filter(([key]) => key !== "observacion")
-      .every(
-        ([, value]) =>
-          value !== "" && value !== null && value !== undefined && value !== 0
-      );
+      // Validar que todos los campos estén llenos exceptuando "observacion"
+      const isValid = Object.entries(dataEntry)
+        .filter(([key]) => key !== "observacion")
+        .every(
+          ([, value]) =>
+            value !== "" && value !== null && value !== undefined && value !== 0
+        );
 
-    // En caso de ser válido
-    if (isValid) {
-      // Buscar el código del producto en el inventario
-      const dataInventory = await findOneItemInventory(product.cod_producto);
+      // En caso de ser válido
+      if (isValid) {
+        // Buscar el código del producto en el inventario
+        const dataInventory = await findOneItemInventory(product.cod_producto);
 
-      console.log("Existe?: ", dataInventory.exists);
+        console.log("Existe?: ", dataInventory.exists);
 
-      /********************************CUANDO NO EXISTE EL LOTE******************************/
-      // En caso de que el código todavía no esté en el inventario y NO contiene lotes
-      if (!dataInventory.exists && hasLote === "no") {
-        // Crear un nuevo registro en el inventario
-        await handlerSaveInventory({
-          cod_producto: newEntry.cod_producto,
-          inventario_actual: newEntry.cantidad,
-        });
+        /********************************CUANDO NO EXISTE EL LOTE******************************/
+        // En caso de que el código todavía no esté en el inventario y NO contiene lotes
+        if (!dataInventory.exists && hasLote === "no") {
+          // Crear un nuevo registro en el inventario
+          await handlerSaveInventory({
+            cod_producto: newEntry.cod_producto,
+            inventario_actual: newEntry.cantidad,
+          });
+        }
+
+        // En caso de que el código esté o no en el inventario, y SÍ contiene lotes
+        if (
+          (!dataInventory.exists || dataInventory.exists) &&
+          hasLote === "si"
+        ) {
+          // Guardar la entrada como pendiente sin ingresarlo al inventario
+          await handlerSavePendingEntry({
+            cod_producto: newEntry.cod_producto,
+            cantidad_a_registrar: newEntry.cantidad,
+            fecha_registro: null,
+            estado_entrada: "Pendiente",
+          });
+        }
+
+        /********************************CUANDO SÍ EXISTE EL LOTE******************************/
+        // En caso de que el código esté en el inventario y NO contiene lotes
+        if (dataInventory.exists && hasLote === "no") {
+          // Actualizar el inventario sumando el valor actual con el nuevo
+          await handlerUpdateInventory(dataInventory.data.id_inventario, {
+            inventario_actual:
+              dataInventory.data.inventario_actual + newEntry.cantidad,
+          });
+        }
+
+        //console.log(dataInventory);
+        await saveStoreEntry(newEntry);
+        setOpen(false);
+      } else {
+        setErrorMessage(true);
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 5000);
       }
-
-      // En caso de que el código esté o no en el inventario, y SÍ contiene lotes
-      if ((!dataInventory.exists || dataInventory.exists) && hasLote === "si") {
-        // Guardar la entrada como pendiente sin ingresarlo al inventario
-        await handlerSavePendingEntry({
-          cod_producto: newEntry.cod_producto,
-          cantidad_a_registrar: newEntry.cantidad,
-          fecha_registro: null,
-          estado_entrada: "Pendiente",
-        });
-      }
-
-      /********************************CUANDO SÍ EXISTE EL LOTE******************************/
-      // En caso de que el código esté en el inventario y NO contiene lotes
-      if (dataInventory.exists && hasLote === "no") {
-        // Actualizar el inventario sumando el valor actual con el nuevo
-        await handlerUpdateInventory(dataInventory.data.id_inventario, {
-          inventario_actual:
-            dataInventory.data.inventario_actual + newEntry.cantidad,
-        });
-      }
-
-      //console.log(dataInventory);
-      await saveStoreEntry(newEntry);
-      setOpen(false);
-    } else {
-      setErrorMessage(true);
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 5000);
+    } catch (error) {
+      console.error("Error al registrar la entrada", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al registrar la entrada",
+        text: "No se pudo completar la operación",
+      });
+    } finally {
+      setDisabledButton(false);
     }
   };
 
@@ -261,6 +280,7 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
           <Button
             className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
             onClick={handlerSaveEntry}
+            disabled={disabledButton}
           >
             Registrar entrada
           </Button>

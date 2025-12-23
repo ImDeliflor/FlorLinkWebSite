@@ -4,7 +4,6 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import "dayjs/locale/es"; // importar el idioma
 import { medidas } from "@/shared/data/selectOptions";
-import { MdOutlineInventory } from "react-icons/md";
 import { FiRefreshCcw } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
@@ -12,6 +11,7 @@ import { initialFilteredFormProduct } from "../../utils/initialValues";
 import type { FormFilterEntries } from "../types/entry";
 import { filterEntradas } from "../utils/entradasFilters";
 import { useStoreEntriesContext } from "../hooks/useStoreEntriesContext";
+import { CiInboxIn } from "react-icons/ci";
 
 export const StoreEntries = () => {
   // Configuración de fecha, hora y zona horaria
@@ -52,7 +52,7 @@ export const StoreEntries = () => {
     <div className="flex flex-col justify-between bg-[rgb(249,241,245)] h-screen p-2">
       <div className="flex items-center justify-between min-h-[10%] min-w-full bg-white px-5 rounded-[0.7rem]">
         <div className="flex items-center justify-center">
-          <MdOutlineInventory size={35} color="#484848" />
+          <CiInboxIn size={35} color="#484848" />
           <span className="ml-4 text-3xl text-[#484848] font-bold">
             Inventario almacén
           </span>

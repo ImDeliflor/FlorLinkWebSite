@@ -4,7 +4,6 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import "dayjs/locale/es"; // importar el idioma
 import { medidas } from "@/shared/data/selectOptions";
-import { MdOutlineInventory } from "react-icons/md";
 import { FiRefreshCcw } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
@@ -12,6 +11,7 @@ import { initialFilteredFormProduct } from "../../utils/initialValues";
 import { useStoreIssuesContext } from "../hooks/useStoreIssuesContext";
 import type { FormFilterIssues } from "../types/issue";
 import { filterSalidas } from "../utils/salidasFilters";
+import { CiInboxOut } from "react-icons/ci";
 
 export const StoreIssues = () => {
   // Configuración de fecha, hora y zona horaria
@@ -52,7 +52,7 @@ export const StoreIssues = () => {
     <div className="flex flex-col justify-between bg-[rgb(249,241,245)] h-screen p-2">
       <div className="flex items-center justify-between min-h-[10%] min-w-full bg-white px-5 rounded-[0.7rem]">
         <div className="flex items-center justify-center">
-          <MdOutlineInventory size={35} color="#484848" />
+          <CiInboxOut size={35} color="#484848" />
           <span className="ml-4 text-3xl text-[#484848] font-bold">
             Salidas almacén
           </span>
@@ -155,7 +155,7 @@ export const StoreIssues = () => {
                 <th className="px-4 py-3 text-[#82385D]">Categoría</th>
                 <th className="px-4 py-3 text-[#82385D]">Unidad de medida</th>
                 <th className="px-4 py-3 text-[#82385D]">Cantidad</th>
-                <th className="px-4 py-3 text-[#82385D]">Precio/u</th>
+                <th className="px-4 py-3 text-[#82385D]">Centro Costos</th>
                 <th className="px-4 py-3 text-[#82385D]">Realizada por</th>
                 <th className="px-4 py-3"></th>
               </tr>
