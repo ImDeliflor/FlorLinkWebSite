@@ -6,7 +6,7 @@ import { API_BASE_URL } from "@/config/apiConfig";
 
 interface TokenPayload {
   email: string;
-  id_rol: number;
+  roles: number[];
   iat: number;
   exp: number;
 }
@@ -44,8 +44,10 @@ export interface UserData {
   tipo_contrato: string;
   tipo_documento: string;
   id_usuario: number | null;
-  id_rol: number | null;
-  nombre_rol: string | null;
+  roles: {
+    id_rol: number;
+    nombre_rol: string;
+  }[];
   id_jefe_grupo_colaborativo: number | null;
   jefe_grupo_colaborativo: string | null;
   id_grupo_colaborativo: number | null;
@@ -61,6 +63,7 @@ interface AuthState {
   logout: (message?: string) => void;
   fetchUserData: (token: string) => Promise<void>;
   checkToken: () => boolean;
+  hasRole: (roleId: number) => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -120,6 +123,12 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           console.error("Error al obtener datos del usuario:", error);
         }
+      },
+
+      hasRole: (roleId: number) => {
+        const user = get().user;
+        if (!user?.roles) return false;
+        return user.roles.some((r) => r.id_rol === roleId);
       },
     }),
     {

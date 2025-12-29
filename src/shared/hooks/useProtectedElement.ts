@@ -1,33 +1,40 @@
 import { useAuthStore } from "@/shared/store/authStore";
 import type { Role } from "@/shared/enums/role";
 
+const SUPERADMIN_ROLE_ID = 3;
+
 export const useProtectedElement = () => {
   const { user } = useAuthStore();
-  const userRole = user?.id_rol as Role | undefined;
-  const esLider = user?.id_jefe_grupo_colaborativo;
+
+  const roles = user?.roles ?? [];
+  const esLider = !!user?.id_jefe_grupo_colaborativo;
+
+  const isSuperAdmin = roles.some((r) => r.id_rol === SUPERADMIN_ROLE_ID);
 
   const canAccess = (allowedRoles: readonly Role[]) => {
-    // Superadmin puede ver todo
-    if (userRole === 3) return true;
+    // Superadmin ve todo
+    if (isSuperAdmin) return true;
 
-    if (!userRole) return false;
-    return allowedRoles.includes(userRole);
+    if (!roles.length) return false;
+
+    return roles.some((r) => allowedRoles.includes(r.id_rol as Role));
   };
 
   const esLiderGrupoColaborativo = () => {
-    // Superadmin puede acceder a todo
-    if (userRole === 3) return true;
+    // Superadmin accede a todo
+    if (isSuperAdmin) return true;
 
-    if (esLider) return true;
-
-    return false;
+    return esLider;
   };
 
   const esLiderGrupoColaborativoSinSA = () => {
-    if (esLider) return true;
-
-    return false;
+    return esLider;
   };
 
-  return { canAccess, esLiderGrupoColaborativo, esLiderGrupoColaborativoSinSA };
+  return {
+    canAccess,
+    esLiderGrupoColaborativo,
+    esLiderGrupoColaborativoSinSA,
+    isSuperAdmin,
+  };
 };

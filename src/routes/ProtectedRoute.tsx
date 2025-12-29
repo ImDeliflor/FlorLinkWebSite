@@ -15,17 +15,29 @@ export const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
   const { user, isAuthenticated } = useAuthStore();
 
+  // 1No autenticado
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  const userRole = user?.id_rol as Role | undefined;
+  // Seguridad extra
+  if (!user) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-  if (userRole == 3) {
+  const userRoles = user.roles ?? [];
+
+  // Superadmin ve todo
+  if (userRoles.some((r) => r.id_rol === Role.Superadmin)) {
     return element;
   }
 
-  if (!userRole || !allowedRoles.includes(userRole)) {
+  // Validar roles permitidos
+  const hasPermission = allowedRoles.some((allowedRole) =>
+    userRoles.some((userRole) => userRole.id_rol === allowedRole)
+  );
+
+  if (!hasPermission) {
     return <Navigate to="/unauthorized" replace />;
   }
 
