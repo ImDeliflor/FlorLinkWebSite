@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import type { StoreEntry } from "../types/entry";
+import type { ProcessStoreEntry, StoreEntry } from "../types/entry";
 import api from "@/shared/api/axiosConfig";
 import { API_BASE_URL } from "@/config/apiConfig";
 import type { StoreEntryReport } from "../types/entry";
@@ -27,6 +27,24 @@ export const useStoreEntries = () => {
     }
   };
 
+  // Función para procesar las entradas (transacción)
+  const processStoreEntry = async (entry: ProcessStoreEntry) => {
+    try {
+      await api.post(`${API_BASE_URL}/entradas-almacen/procesar`, entry);
+      Swal.fire({
+        icon: "success",
+        title: `¡Proceso realizado correctamente!`,
+        confirmButtonColor: "#82385D",
+      });
+    } catch (error) {
+      console.error(
+        "Algo salió mal en el proceso del código: ",
+        entry.cod_producto
+      );
+      throw error;
+    }
+  };
+
   // Función para obtener todas las entradas
   const getStoreEntry = async () => {
     try {
@@ -41,6 +59,7 @@ export const useStoreEntries = () => {
   // Datos y funciones a retornar
   return {
     saveStoreEntry,
+    processStoreEntry,
     entries,
     getStoreEntry,
   };

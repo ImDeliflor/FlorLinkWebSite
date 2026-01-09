@@ -1,5 +1,6 @@
 export interface StoreIssue {
   id_salida_almacen?: number;
+  tipo_documento: string;
   fecha_salida?: string;
   cod_producto?: number;
   cantidad: number;

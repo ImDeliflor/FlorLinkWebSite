@@ -58,9 +58,6 @@ export default function StoreIssueModal({
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
 
-  // useState para habilitar/deshabilitar
-  const [disabledButton, setDisabledButton] = useState(false);
-
   // useState para manejar el lote seleccionado
   const [selectedLote, setSelectedLote] = useState({
     id_lote_producto: 0,
@@ -75,13 +72,15 @@ export default function StoreIssueModal({
       l.cantidad_disponible_lote > 0
   );
 
+  // useState para cargar el motivo del ajuste o ND
+  const [motivoAjusteNC, setMotivoAjusteNC] = useState("");
+
   // data para el formulario de las entradas
   const [dataIssue, setDataIssue] = useState<StoreIssue>(initialValueIssue);
 
   // Función para registrar la salida del lote
   const handlerSaveIssue = async () => {
     try {
-      setDisabledButton(true);
       // Construir el array que se va enviar al post
       const array_salida = {
         ...dataIssue,
@@ -89,6 +88,7 @@ export default function StoreIssueModal({
         cod_producto: inventory.cod_producto,
         created_by: user?.id_usuario,
         id_lote_producto: tiene_lote ? selectedLote.id_lote_producto : null,
+        motivo_ajuste_nd: motivoAjusteNC,
       };
 
       // Validar que los campos estén diligenciados
@@ -100,6 +100,12 @@ export default function StoreIssueModal({
         alert("¡Todos los campos deben estar llenos!");
         return;
       }
+
+      // Concatenar el motivo del ajuste o NC en caso de haberlo
+      array_salida.observacion =
+        array_salida.motivo_ajuste_nd !== ""
+          ? `${array_salida.motivo_ajuste_nd}. ${array_salida.observacion}`
+          : array_salida.observacion;
 
       if (tiene_lote) {
         // Enviar datos para el proceso transaccional en caso de SÍ tener lote
@@ -120,20 +126,22 @@ export default function StoreIssueModal({
       });
     } catch (error) {
       console.error("Error al registrar la salida", error);
+      setOpen(false);
       Swal.fire({
         icon: "error",
         title: "Error al registrar la salida",
         text: "No se pudo completar la operación",
+        confirmButtonColor: "#82385D",
       });
     } finally {
       // Obtener el inventario actualizado
-      setDisabledButton(false);
       await getStoreInventory();
     }
   };
 
   useEffect(() => {
     setDataIssue(initialValueIssue);
+    setMotivoAjusteNC("");
   }, [open]);
 
   useEffect(() => {
@@ -182,36 +190,49 @@ export default function StoreIssueModal({
                     .map((lote, index) => (
                       <tr
                         key={index}
-                        className={
-                          "cursor-pointer transition hover:bg-gray-100 hover:shadow-sm"
-                        }
+                        className={` ${
+                          index === 0
+                            ? "cursor-pointer transition hover:bg-gray-100 hover:shadow-sm"
+                            : ""
+                        }  `}
                         onClick={() => {
-                          // if (index === 0) {
-                          //   setSelectedLote((prev) => ({
-                          //     ...prev,
-                          //     id_lote_producto: lote.id_lote_producto ?? 0,
-                          //     nro_lote: lote.nro_lote,
-                          //     cantidad_disponible_lote:
-                          //       lote.cantidad_disponible_lote,
-                          //   }));
-                          // }
-                          setSelectedLote((prev) => ({
-                            ...prev,
-                            id_lote_producto: lote.id_lote_producto ?? 0,
-                            nro_lote: lote.nro_lote,
-                            cantidad_disponible_lote:
-                              lote.cantidad_disponible_lote,
-                          }));
+                          if (index === 0) {
+                            setSelectedLote((prev) => ({
+                              ...prev,
+                              id_lote_producto: lote.id_lote_producto ?? 0,
+                              nro_lote: lote.nro_lote,
+                              cantidad_disponible_lote:
+                                lote.cantidad_disponible_lote,
+                            }));
+                          }
                         }}
                       >
-                        <td className="px-4 py-2">{lote.nro_lote}</td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
+                          {lote.nro_lote}
+                        </td>
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {dayjs(lote.fecha_vencimiento).format("DD/MM/YYYY")}
                         </td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {lote.categoria_toxicologica}
                         </td>
-                        <td className="px-4 py-2">
+                        <td
+                          className={`px-4 py-2 ${
+                            index !== 0 && "text-gray-400"
+                          }`}
+                        >
                           {lote.cantidad_disponible_lote}
                         </td>
                       </tr>
@@ -231,6 +252,25 @@ export default function StoreIssueModal({
                 {inventory.unidad_medida}
               </span>
             )}
+            <label htmlFor="" className="text-[#909090]">
+              Tipo de documento
+            </label>
+            <select
+              id="default"
+              className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
+              value={dataIssue.tipo_documento}
+              onChange={(e) =>
+                setDataIssue((prev) => ({
+                  ...prev,
+                  tipo_documento: e.target
+                    .value as StoreIssue["tipo_documento"],
+                }))
+              }
+            >
+              <option value="AJUSTE INVENTARIO">Ajuste Inventario</option>
+              <option value="NC">NC</option>
+              <option value="SALIDA">Salida</option>
+            </select>
             <label htmlFor="" className="text-[#909090]">
               Fecha aplicación
             </label>
@@ -286,6 +326,24 @@ export default function StoreIssueModal({
                   </option>
                 ))}
             </select>
+            {dataIssue.tipo_documento !== "SALIDA" && (
+              <select
+                id="default"
+                className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
+                value={motivoAjusteNC}
+                onChange={(e) => setMotivoAjusteNC(e.target.value)}
+              >
+                <option value="">Selecciona el motivo</option>
+                <option value="Ajuste de inventario por cierre de mes">
+                  Ajuste de inventario por cierre de mes
+                </option>
+                <option value="Ajuste de inventario por conteo físico">
+                  Ajuste de inventario por conteo físico
+                </option>
+                <option value="Error en entrada">Error en entrada</option>
+                <option value="Error en salida">Error en salida</option>
+              </select>
+            )}
             <textarea
               className="border-1 border-[#9D9D9D] w-[45%] p-2 px-4 resize-none rounded-xl"
               placeholder="Observaciones"
@@ -296,6 +354,7 @@ export default function StoreIssueModal({
                   observacion: e.target.value,
                 }))
               }
+              onFocus={(e) => e.target.select()}
             />
             {tiene_lote
               ? selectedLote.id_lote_producto !== 0 &&
@@ -324,7 +383,6 @@ export default function StoreIssueModal({
                 <Button
                   className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
                   onClick={handlerSaveIssue}
-                  disabled={disabledButton}
                 >
                   Registrar salida
                 </Button>
@@ -333,7 +391,6 @@ export default function StoreIssueModal({
                 <Button
                   className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
                   onClick={handlerSaveIssue}
-                  disabled={disabledButton}
                 >
                   Registrar salida
                 </Button>

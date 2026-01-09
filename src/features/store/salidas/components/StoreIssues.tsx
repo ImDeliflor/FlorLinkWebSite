@@ -164,7 +164,7 @@ export const StoreIssues = () => {
               {filteredEntries.map((item, index) => (
                 <tr key={index}>
                   <td className="px-4 py-2">
-                    {dayjs(item.fecha_salida).format("YYYY-MM-DD HH:mm:ss")}
+                    {dayjs(item.fecha_aplicacion).format("YYYY-MM-DD")}
                   </td>
                   <td className="px-4 py-2">{item.cod_producto}</td>
                   <td className="px-4 py-2">{item.nro_lote}</td>
