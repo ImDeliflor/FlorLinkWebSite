@@ -182,10 +182,12 @@ export default function StoreIssueModal({
                 </thead>
                 <tbody>
                   {[...dataFiltered]
-                    .sort((a, b) =>
-                      dayjs(a.fecha_vencimiento).diff(
-                        dayjs(b.fecha_vencimiento)
-                      )
+                    .sort(
+                      (a, b) =>
+                        dayjs(a.fecha_vencimiento).diff(
+                          dayjs(b.fecha_vencimiento)
+                        ) ||
+                        (a.id_lote_producto ?? 0) - (b.id_lote_producto ?? 0)
                     )
                     .map((lote, index) => (
                       <tr
