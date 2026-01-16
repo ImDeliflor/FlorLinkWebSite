@@ -13,6 +13,8 @@ import type { Empleado } from "../../types/employee";
 import { useBasicTablesContext } from "@/features/basic_tables/hooks/useBasicTablesContext";
 import { useEmployeeContext } from "../../hooks/useEmployeeContext";
 import { Button } from "@/components/ui/button";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import { IndividualPrivileges } from "@/shared/config/permissions";
 
 interface EmployeeProps {
   employee: Empleado;
@@ -44,6 +46,9 @@ export default function ModalDetailEmployee({ employee }: EmployeeProps) {
 
   // Almacenar los datos originales
   const originData = employee;
+
+  // Función para dar acceso a un elemento
+  const { canAccess } = useProtectedElement();
 
   // Función para formato de pesos en COP
   const formatCOP = (value: number | null | undefined) => {
@@ -345,43 +350,47 @@ export default function ModalDetailEmployee({ employee }: EmployeeProps) {
             />
           </div>
 
-          {/********************* DIV PARA EL SALARIO *****************************/}
-          <div className="w-auto mr-4">
-            <label htmlFor="" className="text-[#909090] mx-2">
-              Salario
-            </label>
-            <input
-              className="border-1 p-2 rounded-lg border-[#9D9D9D] text-[#484848] text-center"
-              type="text"
-              value={formatCOP(dataEmployee.salario)}
-              onChange={(e) => {
-                // Quitamos todo lo que no sea número
-                const rawValue = e.target.value.replace(/\D/g, "");
-                setDataEmployee((prev) => ({
-                  ...prev,
-                  salario: Number(rawValue),
-                }));
-              }}
-            />
-          </div>
+          {canAccess(IndividualPrivileges.gestion_humana.accesoSalario) && (
+            <>
+              {/********************* DIV PARA EL SALARIO *****************************/}
+              <div className="w-auto mr-4">
+                <label htmlFor="" className="text-[#909090] mx-2">
+                  Salario
+                </label>
+                <input
+                  className="border-1 p-2 rounded-lg border-[#9D9D9D] text-[#484848] text-center"
+                  type="text"
+                  value={formatCOP(dataEmployee.salario)}
+                  onChange={(e) => {
+                    // Quitamos todo lo que no sea número
+                    const rawValue = e.target.value.replace(/\D/g, "");
+                    setDataEmployee((prev) => ({
+                      ...prev,
+                      salario: Number(rawValue),
+                    }));
+                  }}
+                />
+              </div>
 
-          {/********************* DIV PARA EL SALARIO EN LETRAS *****************************/}
-          <div className="w-auto mr-4">
-            <label htmlFor="" className="text-[#909090] mx-2">
-              Salario letras
-            </label>
-            <input
-              className="border-1 p-2 rounded-lg border-[#9D9D9D] text-[#484848] text-center"
-              type="text"
-              value={dataEmployee.salario_letras}
-              onChange={(e) => {
-                setDataEmployee((prev) => ({
-                  ...prev,
-                  salario_letras: e.target.value,
-                }));
-              }}
-            />
-          </div>
+              {/********************* DIV PARA EL SALARIO EN LETRAS *****************************/}
+              <div className="w-auto mr-4">
+                <label htmlFor="" className="text-[#909090] mx-2">
+                  Salario letras
+                </label>
+                <input
+                  className="border-1 p-2 rounded-lg border-[#9D9D9D] text-[#484848] text-center"
+                  type="text"
+                  value={dataEmployee.salario_letras}
+                  onChange={(e) => {
+                    setDataEmployee((prev) => ({
+                      ...prev,
+                      salario_letras: e.target.value,
+                    }));
+                  }}
+                />
+              </div>
+            </>
+          )}
 
           {/********************* DIV PARA EL AUXILIO DE TRANSPORTE *****************************/}
           <div className="w-auto mr-4">

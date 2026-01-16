@@ -63,4 +63,8 @@ export const IndividualPrivileges = {
     // Roles permitidos para crear ajustes de inventario, NC y ND
     accesoAINCND: [Role.AdminAlmacen],
   },
+  gestion_humana: {
+    // Roles permitidos para visualizar y editar el salario de los empleados
+    accesoSalario: [Role.AdminGH],
+  },
 } as const;
