@@ -22,6 +22,8 @@ import { LoteProductsProvider } from "@/features/store/lote_productos/context/Lo
 import { StoreIssuesProvider } from "@/features/store/salidas/context/StoreIssuesProvider";
 import { StoreEntries } from "@/features/store/entradas/components/StoreEntries";
 import { StoreIssues } from "@/features/store/salidas/components/StoreIssues";
+import { Employees } from "@/features/human_resources/empleados/components/Employees";
+import { EmployeeProvider } from "@/features/human_resources/empleados/context/EmployeeProvider";
 
 export const UserRoutes = () => {
   return (
@@ -184,6 +186,36 @@ export const UserRoutes = () => {
                     </LoteProductsProvider>
                   </StoreIssuesProvider>
                 </StoreEntriesProvider>
+              }
+            />
+            {/* RUTAS PARA GESTIÓN HUMANA */}
+            {/* Ruta para los empleados */}
+            <Route
+              path="/gh/employees"
+              element={
+                <EmployeeProvider>
+                  <BasicTablesProvider>
+                    <ProtectedRoute
+                      allowedRoles={
+                        PermissionsSections.gestion_humana.empleados
+                      }
+                      element={<Employees />}
+                    />
+                  </BasicTablesProvider>
+                </EmployeeProvider>
+              }
+            />
+            <Route
+              path="/gh/perf-evaluation"
+              element={
+                <BasicTablesProvider>
+                  <ProtectedRoute
+                    allowedRoles={
+                      PermissionsSections.gestion_humana.evaluaciones_desempenio
+                    }
+                    element={<Employees />}
+                  />
+                </BasicTablesProvider>
               }
             />
           </Routes>

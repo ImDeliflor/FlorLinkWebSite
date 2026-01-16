@@ -23,6 +23,8 @@ import type { StoreInventoryReport } from "@/features/store/inventario/types/sto
 import { useAuthStore } from "@/shared/store/authStore";
 import Swal from "sweetalert2";
 import { useStoreInventoryContext } from "@/features/store/inventario/hooks/useStoreInventoryContext";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import { IndividualPrivileges } from "@/shared/config/permissions";
 
 interface IssueProps {
   inventory: StoreInventoryReport;
@@ -57,6 +59,9 @@ export default function StoreIssueModal({
 
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
+
+  // Función para dar acceso a un elemento
+  const { canAccess } = useProtectedElement();
 
   // useState para manejar el lote seleccionado
   const [selectedLote, setSelectedLote] = useState({
@@ -254,25 +259,30 @@ export default function StoreIssueModal({
                 {inventory.unidad_medida}
               </span>
             )}
-            <label htmlFor="" className="text-[#909090]">
-              Tipo de documento
-            </label>
-            <select
-              id="default"
-              className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
-              value={dataIssue.tipo_documento}
-              onChange={(e) =>
-                setDataIssue((prev) => ({
-                  ...prev,
-                  tipo_documento: e.target
-                    .value as StoreIssue["tipo_documento"],
-                }))
-              }
-            >
-              <option value="AJUSTE INVENTARIO">Ajuste Inventario</option>
-              <option value="NC">NC</option>
-              <option value="SALIDA">Salida</option>
-            </select>
+            {canAccess(IndividualPrivileges.almacen.accesoAINCND) && (
+              <>
+                <label htmlFor="" className="text-[#909090]">
+                  Tipo de documento
+                </label>
+                <select
+                  id="default"
+                  className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
+                  value={dataIssue.tipo_documento}
+                  onChange={(e) =>
+                    setDataIssue((prev) => ({
+                      ...prev,
+                      tipo_documento: e.target
+                        .value as StoreIssue["tipo_documento"],
+                    }))
+                  }
+                >
+                  <option value="AJUSTE INVENTARIO">Ajuste Inventario</option>
+                  <option value="NC">NC</option>
+                  <option value="SALIDA">Salida</option>
+                </select>
+              </>
+            )}
+
             <label htmlFor="" className="text-[#909090]">
               Fecha aplicación
             </label>

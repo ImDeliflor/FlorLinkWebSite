@@ -2,13 +2,13 @@ import type { DetalleCompra, Product } from "@/features/products/types/product";
 import { useEffect, useState } from "react";
 import { type Order, type OrdersList, type UpdateOrder } from "../types/order";
 import Swal from "sweetalert2";
-import axios from "axios";
 import { API_BASE_URL } from "@/config/apiConfig";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { useAuthStore } from "@/shared/store/authStore";
 import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import api from "@/shared/api/axiosConfig";
 
 const initialProduct: Product = {
   id_categoria: 24,
@@ -107,7 +107,7 @@ export const useOrder = () => {
   const getOrders = async () => {
     setLoadingOrders(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/orden-compra`);
+      const response = await api.get(`${API_BASE_URL}/orden-compra`);
       setOrders(response.data);
     } catch (error) {
       console.error("Error al obtener los productos: ", error);
@@ -163,7 +163,7 @@ export const useOrder = () => {
     // try para el envío de los datos a la API
     try {
       setDisabledButton(true);
-      const response_order = await axios.post(
+      const response_order = await api.post(
         `${API_BASE_URL}/orden-compra`,
         new_order
       );
@@ -179,7 +179,7 @@ export const useOrder = () => {
           const response_products = arrayProducts.map(async (product) => {
             // try para el envío de los datos a la API
             try {
-              await axios.post(`${API_BASE_URL}/detalle-compra`, {
+              await api.post(`${API_BASE_URL}/detalle-compra`, {
                 ...product,
                 id_orden_compra: id_orden_compra,
                 estado_detalle_compra: "Aprobado",
@@ -201,7 +201,7 @@ export const useOrder = () => {
 
           // Cambiar el estado de toda la orden a aprobado
           try {
-            await axios.put(`${API_BASE_URL}/orden-compra/${id_orden_compra}`, {
+            await api.put(`${API_BASE_URL}/orden-compra/${id_orden_compra}`, {
               estado_compra: "Aprobado",
               aprobado_por: 15, // Usuario de Don David
               fecha_validacion_orden_compra: dayjs().format(
@@ -221,7 +221,7 @@ export const useOrder = () => {
           const response_products = arrayProducts.map(async (product) => {
             // try para el envío de los datos a la API
             try {
-              await axios.post(`${API_BASE_URL}/detalle-compra`, {
+              await api.post(`${API_BASE_URL}/detalle-compra`, {
                 ...product,
                 id_orden_compra: id_orden_compra,
               });
@@ -283,7 +283,7 @@ export const useOrder = () => {
         const response_products = arrayProducts.map(async (product) => {
           // try para el envío de los datos a la API
           try {
-            await axios.post(`${API_BASE_URL}/detalle-compra`, {
+            await api.post(`${API_BASE_URL}/detalle-compra`, {
               ...product,
               id_orden_compra: id_orden_compra,
             });
@@ -378,7 +378,7 @@ export const useOrder = () => {
 
     if (id) {
       try {
-        await axios.put(`${API_BASE_URL}/orden-compra/${id}`, order);
+        await api.put(`${API_BASE_URL}/orden-compra/${id}`, order);
         Swal.fire({
           icon: "success",
           title: message,

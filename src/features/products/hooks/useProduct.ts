@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import api from "@/shared/api/axiosConfig";
 
 export const useProduct = () => {
   dayjs.extend(utc);
@@ -22,7 +23,7 @@ export const useProduct = () => {
   // Función para traer todos los datos de la vista de productos detallados
   const getProductsReport = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/detalle-compra/report`);
+      const response = await api.get(`${API_BASE_URL}/detalle-compra/report`);
       setProductReport(response.data);
       console.log(response.data);
     } catch (error) {
@@ -55,7 +56,7 @@ export const useProduct = () => {
     // Almacenar las promesas de los datos para actualizar
     const updateData = cleanedData.map(async (product) => {
       try {
-        await axios.put(
+        await api.put(
           `${API_BASE_URL}/detalle-compra/${product.id_detalle_compra}`,
           product
         );
@@ -80,7 +81,7 @@ export const useProduct = () => {
   // Función para aceptar o rechazar un producto
   const setDetailProductState = async (product: UpdateProduct) => {
     try {
-      await axios.put(
+      await api.put(
         `${API_BASE_URL}/detalle-compra/${product.id_detalle_compra}`,
         product
       );
@@ -118,7 +119,7 @@ export const useProduct = () => {
   // Función para eliminar un producto
   const deleteProduct = async (id_detalle_compra: number) => {
     try {
-      await axios.delete(`${API_BASE_URL}/detalle-compra/${id_detalle_compra}`);
+      await api.delete(`${API_BASE_URL}/detalle-compra/${id_detalle_compra}`);
       getProductsReport();
     } catch (error) {
       if (axios.isAxiosError(error)) {

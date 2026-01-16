@@ -1,21 +1,66 @@
 import { Role } from "@/shared/enums/role";
 
+// Objeto para parametrizar los permisos de cada dropdown
 export const PermissionsDropdowns = {
-  contabilidad: [Role.Admin, Role.User],
-  almacen: [Role.Admin],
+  contabilidad: [
+    Role.Admin,
+    Role.AdminCompras,
+    Role.AprobadorCompras,
+    Role.UsuarioCompras,
+  ],
+  almacen: [
+    Role.Admin,
+    Role.AdminAlmacen,
+    Role.Almacenista,
+    Role.SalidasAlmacen,
+  ],
+  gestion_humana: [Role.Admin, Role.AdminGH, Role.UsuarioGH],
 } as const;
 
+// Objeto para parametrizar los permisos de cada sección
 export const PermissionsSections = {
   contabilidad: {
-    nuevaOrden: [Role.Admin, Role.User],
-    misOrdenes: [Role.Admin, Role.User],
-    ordenesEquipo: [Role.Admin, Role.User],
-    ordenes: [Role.Admin],
+    nuevaOrden: [
+      Role.Admin,
+      Role.AdminCompras,
+      Role.AprobadorCompras,
+      Role.UsuarioCompras,
+    ],
+    misOrdenes: [
+      Role.Admin,
+      Role.AdminCompras,
+      Role.AprobadorCompras,
+      Role.UsuarioCompras,
+    ],
+    ordenesEquipo: [Role.Admin, Role.AdminCompras, Role.AprobadorCompras],
+    ordenes: [Role.Admin, Role.AdminAlmacen],
   },
   almacen: {
-    productosAlmacen: [Role.Admin],
-    inventarioAlmacen: [Role.Admin],
-    entradas: [Role.Admin],
-    salidas: [Role.Admin],
+    productosAlmacen: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
+    inventarioAlmacen: [
+      Role.Admin,
+      Role.AdminAlmacen,
+      Role.Almacenista,
+      Role.SalidasAlmacen,
+    ],
+    entradas: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
+    salidas: [
+      Role.Admin,
+      Role.AdminAlmacen,
+      Role.Almacenista,
+      Role.SalidasAlmacen,
+    ],
+  },
+  gestion_humana: {
+    empleados: [Role.Admin, Role.AdminGH, Role.UsuarioGH],
+    evaluaciones_desempenio: [Role.Superadmin],
+  },
+} as const;
+
+// Objeto para parametrizar los permisos de cada sección
+export const IndividualPrivileges = {
+  almacen: {
+    // Roles permitidos para crear ajustes de inventario, NC y ND
+    accesoAINCND: [Role.AdminAlmacen],
   },
 } as const;

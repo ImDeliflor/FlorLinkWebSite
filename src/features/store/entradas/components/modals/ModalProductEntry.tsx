@@ -21,6 +21,8 @@ import { useAuthStore } from "@/shared/store/authStore";
 import { initialValueEntry } from "../../utils/initialValues";
 import Swal from "sweetalert2";
 import type { HasLoteEnum } from "../../types/enums";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import { IndividualPrivileges } from "@/shared/config/permissions";
 
 interface ProductEntryProps {
   product: StoreProductReport;
@@ -60,6 +62,9 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
 
   // data para el formulario de las entradas
   const [dataEntry, setDataEntry] = useState<StoreEntry>(initialValueEntry);
+
+  // Función para dar acceso a un elemento
+  const { canAccess } = useProtectedElement();
 
   // Función para guardar la entrada
   const handlerSaveEntry = async () => {
@@ -169,24 +174,29 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
             }
             defaultValue={dataEntry.fecha_factura}
           />
-          <label htmlFor="" className="text-[#909090]">
-            Tipo de documento
-          </label>
-          <select
-            id="default"
-            className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
-            value={dataEntry.tipo_documento}
-            onChange={(e) =>
-              setDataEntry((prev) => ({
-                ...prev,
-                tipo_documento: e.target.value as StoreEntry["tipo_documento"],
-              }))
-            }
-          >
-            <option value="AJUSTE INVENTARIO">Ajuste Inventario</option>
-            <option value="FACTURA">Factura</option>
-            <option value="ND">ND</option>
-          </select>
+          {canAccess(IndividualPrivileges.almacen.accesoAINCND) && (
+            <>
+              <label htmlFor="" className="text-[#909090]">
+                Tipo de documento
+              </label>
+              <select
+                id="default"
+                className="bg-gray-50 w-[45%] border border-gray-300 text-[#484848] rounded-lg py-2 px-6"
+                value={dataEntry.tipo_documento}
+                onChange={(e) =>
+                  setDataEntry((prev) => ({
+                    ...prev,
+                    tipo_documento: e.target
+                      .value as StoreEntry["tipo_documento"],
+                  }))
+                }
+              >
+                <option value="AJUSTE INVENTARIO">Ajuste Inventario</option>
+                <option value="FACTURA">Factura</option>
+                <option value="ND">ND</option>
+              </select>
+            </>
+          )}
 
           {dataEntry.tipo_documento === "FACTURA" ? (
             <input

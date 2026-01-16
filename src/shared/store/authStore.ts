@@ -119,6 +119,7 @@ export const useAuthStore = create<AuthState>()(
           const res = await api.get(
             `${API_BASE_URL}/empleado/empleado-view/correo/${correo}`
           );
+          console.log(res.data);
           set({ user: res.data });
         } catch (error) {
           console.error("Error al obtener datos del usuario:", error);
