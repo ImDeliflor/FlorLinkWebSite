@@ -60,6 +60,9 @@ export default function StoreIssueModal({
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
 
+  // useState para habilitar/deshabilitar
+  const [disabledButton, setDisabledButton] = useState(false);
+
   // Función para dar acceso a un elemento
   const { canAccess } = useProtectedElement();
 
@@ -86,6 +89,7 @@ export default function StoreIssueModal({
   // Función para registrar la salida del lote
   const handlerSaveIssue = async () => {
     try {
+      setDisabledButton(true);
       // Construir el array que se va enviar al post
       const array_salida = {
         ...dataIssue,
@@ -141,6 +145,7 @@ export default function StoreIssueModal({
     } finally {
       // Obtener el inventario actualizado
       await getStoreInventory();
+      setDisabledButton(true);
     }
   };
 
@@ -395,6 +400,7 @@ export default function StoreIssueModal({
                 <Button
                   className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
                   onClick={handlerSaveIssue}
+                  disabled={disabledButton}
                 >
                   Registrar salida
                 </Button>
@@ -403,6 +409,7 @@ export default function StoreIssueModal({
                 <Button
                   className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
                   onClick={handlerSaveIssue}
+                  disabled={disabledButton}
                 >
                   Registrar salida
                 </Button>

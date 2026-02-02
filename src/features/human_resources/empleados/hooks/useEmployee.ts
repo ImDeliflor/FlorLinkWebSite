@@ -3,12 +3,16 @@ import type { Empleado } from "../types/employee";
 import api from "@/shared/api/axiosConfig";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import type { WorkTeam } from "../types/workTeam";
 
 export const useEmployee = () => {
   // SECCIÓN PARA LOS EMPLEADOS
 
   // useState para los empleados
   const [employees, setEmployees] = useState<Empleado[]>([]);
+
+  // useState para el equipo de trabajo
+  const [workTeam, setWorkTeam] = useState<WorkTeam[]>([]);
 
   // Función para traer todos los empleados
   const getEmployees = async () => {
@@ -22,7 +26,10 @@ export const useEmployee = () => {
   };
 
   // Función para guardar los empleados
-  const saveEmployee = async (employee: Empleado) => {
+  const saveEmployee = async (
+    employee: Empleado,
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
     try {
       await api.post(`${API_BASE_URL}/empleado`, employee);
       Swal.fire({
@@ -37,6 +44,8 @@ export const useEmployee = () => {
         confirmButtonColor: "#82385D",
       });
       throw error;
+    } finally {
+      setOpen(false);
     }
   };
 
@@ -44,7 +53,7 @@ export const useEmployee = () => {
   const updateEmployee = async (
     id_empleado = 0,
     employee: Empleado,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     try {
       await api.put(`${API_BASE_URL}/empleado/${id_empleado}`, employee);
@@ -80,7 +89,7 @@ export const useEmployee = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           await api.put(
-            `${API_BASE_URL}/empleado/take-out-employee/${id_empleado}`
+            `${API_BASE_URL}/empleado/take-out-employee/${id_empleado}`,
           );
           await getEmployees();
           Swal.fire({
@@ -101,6 +110,22 @@ export const useEmployee = () => {
     }
   };
 
+  // Función para obtener el equipo de un jefe
+  const getWorkTeam = async (id_jefe = 0) => {
+    try {
+      const response = await api.get(
+        `${API_BASE_URL}/empleado/get-team/${id_jefe}`,
+      );
+      return setWorkTeam(response.data);
+    } catch (error) {
+      console.error(
+        "Error al traer el equipo de trabajo del empleado con id: ",
+        id_jefe,
+      );
+      throw error;
+    }
+  };
+
   // Datos y funciones a retornar
   return {
     saveEmployee,
@@ -108,5 +133,7 @@ export const useEmployee = () => {
     getEmployees,
     updateEmployee,
     takeOutEmployee,
+    workTeam,
+    getWorkTeam,
   };
 };

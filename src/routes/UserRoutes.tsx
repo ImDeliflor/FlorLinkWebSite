@@ -24,6 +24,8 @@ import { StoreEntries } from "@/features/store/entradas/components/StoreEntries"
 import { StoreIssues } from "@/features/store/salidas/components/StoreIssues";
 import { Employees } from "@/features/human_resources/empleados/components/Employees";
 import { EmployeeProvider } from "@/features/human_resources/empleados/context/EmployeeProvider";
+import { EvaluacionesMainScreen } from "@/features/human_resources/evaluacion_desempenio/components/EvaluacionesMainScreen";
+import { EvaluacionProvider } from "@/features/human_resources/evaluacion_desempenio/context/EvaluacionProvider";
 
 export const UserRoutes = () => {
   return (
@@ -208,14 +210,17 @@ export const UserRoutes = () => {
             <Route
               path="/gh/perf-evaluation"
               element={
-                <BasicTablesProvider>
-                  <ProtectedRoute
-                    allowedRoles={
-                      PermissionsSections.gestion_humana.evaluaciones_desempenio
-                    }
-                    element={<Employees />}
-                  />
-                </BasicTablesProvider>
+                <EmployeeProvider>
+                  <EvaluacionProvider>
+                    <ProtectedRoute
+                      allowedRoles={
+                        PermissionsSections.gestion_humana
+                          .evaluaciones_desempenio
+                      }
+                      element={<EvaluacionesMainScreen />}
+                    />
+                  </EvaluacionProvider>
+                </EmployeeProvider>
               }
             />
           </Routes>

@@ -24,7 +24,7 @@ export const Navbar = () => {
   const { canAccess } = useProtectedElement();
 
   return (
-    // 👇 altura mínima de toda la pantalla y layout flex
+    // altura mínima de toda la pantalla y layout flex
     <div className="flex min-h-screen">
       {/* Botón para abrir el sidebar en mobile */}
       <button

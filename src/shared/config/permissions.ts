@@ -53,7 +53,7 @@ export const PermissionsSections = {
   },
   gestion_humana: {
     empleados: [Role.Admin, Role.AdminGH, Role.UsuarioGH],
-    evaluaciones_desempenio: [Role.Superadmin],
+    evaluaciones_desempenio: [Role.Admin, Role.AdminGH],
   },
 } as const;
 
@@ -66,5 +66,8 @@ export const IndividualPrivileges = {
   gestion_humana: {
     // Roles permitidos para visualizar y editar el salario de los empleados
     accesoSalario: [Role.AdminGH],
+    evaluaciones_desempenio: {
+      grupo_primario: [Role.Admin],
+    },
   },
 } as const;

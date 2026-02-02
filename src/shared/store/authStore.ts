@@ -53,6 +53,7 @@ export interface UserData {
   id_grupo_colaborativo: number | null;
   nombre_grupo_colaborativo: string | null;
   tratamiento: string;
+  id_jefe: number;
 }
 
 interface AuthState {
@@ -117,7 +118,7 @@ export const useAuthStore = create<AuthState>()(
           const decoded = jwtDecode<TokenPayload>(tokenToUse);
           const correo = decoded.email;
           const res = await api.get(
-            `${API_BASE_URL}/empleado/empleado-view/correo/${correo}`
+            `${API_BASE_URL}/empleado/empleado-view/correo/${correo}`,
           );
           console.log(res.data);
           set({ user: res.data });
@@ -139,6 +140,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );

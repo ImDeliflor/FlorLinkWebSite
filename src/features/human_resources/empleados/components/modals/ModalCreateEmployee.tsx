@@ -41,7 +41,7 @@ export default function ModalCreateEmployee() {
 
   // useState para los datos del nuevo empleado
   const [dataEmployee, setDataEmployee] = useState<Empleado>(
-    initialFormNewEmployee
+    initialFormNewEmployee,
   );
 
   // Función para formato de pesos en COP
@@ -72,7 +72,7 @@ export default function ModalCreateEmployee() {
       });
 
     if (isValid) {
-      saveEmployee(new_employee);
+      saveEmployee(new_employee, setOpen);
       getEmployees();
     } else {
       setErrorMessage(true);
@@ -123,7 +123,9 @@ export default function ModalCreateEmployee() {
               <option value="0">Seleccionar</option>
               {[...tiposDocumento]
                 .sort((a, b) =>
-                  a.nombre_tipo_documento.localeCompare(b.nombre_tipo_documento)
+                  a.nombre_tipo_documento.localeCompare(
+                    b.nombre_tipo_documento,
+                  ),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_tipo_documento}>
@@ -517,8 +519,8 @@ export default function ModalCreateEmployee() {
               {[...fondosPensiones]
                 .sort((a, b) =>
                   a.nombre_fondo_pensiones.localeCompare(
-                    b.nombre_fondo_pensiones
-                  )
+                    b.nombre_fondo_pensiones,
+                  ),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_fondo_pension}>
@@ -548,8 +550,8 @@ export default function ModalCreateEmployee() {
               {[...fondosCesantias]
                 .sort((a, b) =>
                   a.nombre_fondo_cesantias.localeCompare(
-                    b.nombre_fondo_cesantias
-                  )
+                    b.nombre_fondo_cesantias,
+                  ),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_fondo_cesantias}>
@@ -614,7 +616,7 @@ export default function ModalCreateEmployee() {
               <option value="0">Seleccionar</option>
               {[...estadosCiviles]
                 .sort((a, b) =>
-                  a.nombre_estado_civil.localeCompare(b.nombre_estado_civil)
+                  a.nombre_estado_civil.localeCompare(b.nombre_estado_civil),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_estado_civil}>
@@ -644,8 +646,8 @@ export default function ModalCreateEmployee() {
               {[...mediosTransporte]
                 .sort((a, b) =>
                   a.nombre_medio_transporte.localeCompare(
-                    b.nombre_medio_transporte
-                  )
+                    b.nombre_medio_transporte,
+                  ),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_medio_transporte}>
@@ -674,7 +676,7 @@ export default function ModalCreateEmployee() {
               <option value="0">Seleccionar</option>
               {[...tiposContrato]
                 .sort((a, b) =>
-                  a.nombre_tipo_contrato.localeCompare(b.nombre_tipo_contrato)
+                  a.nombre_tipo_contrato.localeCompare(b.nombre_tipo_contrato),
                 )
                 .map((_valor, index) => (
                   <option key={index} value={_valor.id_tipo_contrato}>
