@@ -33,7 +33,7 @@ export const PermissionsSections = {
       Role.UsuarioCompras,
     ],
     ordenesEquipo: [Role.Admin, Role.AdminCompras, Role.AprobadorCompras],
-    ordenes: [Role.Admin, Role.AdminAlmacen],
+    ordenes: [Role.Admin, Role.AdminCompras],
   },
   almacen: {
     productosAlmacen: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
