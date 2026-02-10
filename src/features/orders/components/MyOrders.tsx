@@ -40,7 +40,7 @@ export const MyOrders = () => {
 
   const totalOrders = orders.reduce(
     (acc, order) => (order.solicitado_por == user?.id_usuario ? acc + 1 : acc),
-    0
+    0,
   );
 
   const pendingOrders = orders.reduce(
@@ -49,7 +49,7 @@ export const MyOrders = () => {
       order.solicitado_por == user?.id_usuario
         ? acc + 1
         : acc,
-    0
+    0,
   );
 
   /*********************** FUNCIÓN PARA ENVIAR LA ORDEN DE LA COMPRA JUNTO AL DETALLE */
@@ -119,9 +119,9 @@ export const MyOrders = () => {
                           order.estado_compra === "Confirmado"
                             ? "text-[#207349]"
                             : order.estado_compra === "Rechazado" ||
-                              order.estado_compra === "Cerrado"
-                            ? "text-[#b82834]"
-                            : "text-[#E9B44C]"
+                                order.estado_compra === "Cerrado"
+                              ? "text-[#b82834]"
+                              : "text-[#E9B44C]"
                         }`}
                       >
                         {order.estado_compra}
@@ -132,11 +132,13 @@ export const MyOrders = () => {
                           observaciones={order.observaciones}
                         />
                       </td>
-                      {order.estado_compra === "En proceso" && order.fecha && (
-                        <td className="px-4 py-2">
-                          <AddProduct nro_orden={order.id_orden_compra} />
-                        </td>
-                      )}
+                      {order.estado_compra === "En proceso" &&
+                        order.fecha &&
+                        dayjs().day() !== 2 && (
+                          <td className="px-4 py-2">
+                            <AddProduct nro_orden={order.id_orden_compra} />
+                          </td>
+                        )}
 
                       <td className="px-4 py-2">
                         <DetailOrder

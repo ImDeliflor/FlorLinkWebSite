@@ -119,14 +119,16 @@ export const NewOrder = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center h-full w-[20%] ">
-          <button
-            className="flex items-center justify-center bg-[#82385D] text-xl font-medium text-[#E8B7BA] h-auto cursor-pointer py-3 px-6 rounded-xl"
-            onClick={handlerSubmitOrder}
-            disabled={disabledButton}
-          >
-            <BsSendPlus className="mr-4" size={25} color="#E8B7BA" />
-            Solicitar
-          </button>
+          {dayjs().day() === 2 || (
+            <button
+              className="flex items-center justify-center bg-[#82385D] text-xl font-medium text-[#E8B7BA] h-auto cursor-pointer py-3 px-6 rounded-xl"
+              onClick={handlerSubmitOrder}
+              disabled={disabledButton}
+            >
+              <BsSendPlus className="mr-4" size={25} color="#E8B7BA" />
+              Solicitar
+            </button>
+          )}
         </div>
       </div>
     </div>

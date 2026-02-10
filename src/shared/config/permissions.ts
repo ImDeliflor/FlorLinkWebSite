@@ -13,6 +13,7 @@ export const PermissionsDropdowns = {
     Role.AdminAlmacen,
     Role.Almacenista,
     Role.SalidasAlmacen,
+    Role.VisualizacionAlmacen,
   ],
   gestion_humana: [Role.Admin, Role.AdminGH, Role.UsuarioGH],
 } as const;
@@ -36,19 +37,31 @@ export const PermissionsSections = {
     ordenes: [Role.Admin, Role.AdminCompras],
   },
   almacen: {
-    productosAlmacen: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
+    productosAlmacen: [
+      Role.Admin,
+      Role.AdminAlmacen,
+      Role.Almacenista,
+      Role.VisualizacionAlmacen,
+    ],
     inventarioAlmacen: [
       Role.Admin,
       Role.AdminAlmacen,
       Role.Almacenista,
       Role.SalidasAlmacen,
+      Role.VisualizacionAlmacen,
     ],
-    entradas: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
+    entradas: [
+      Role.Admin,
+      Role.AdminAlmacen,
+      Role.Almacenista,
+      Role.VisualizacionAlmacen,
+    ],
     salidas: [
       Role.Admin,
       Role.AdminAlmacen,
       Role.Almacenista,
       Role.SalidasAlmacen,
+      Role.VisualizacionAlmacen,
     ],
   },
   gestion_humana: {
@@ -62,6 +75,12 @@ export const IndividualPrivileges = {
   almacen: {
     // Roles permitidos para crear ajustes de inventario, NC y ND
     accesoAINCND: [Role.AdminAlmacen],
+    // Roles permitidos para crear productos
+    crearNuevoProducto: [Role.AdminAlmacen],
+    // Roles que no van a tener acceso a acciones de edición creación o eliminación en almacén
+    visualizarAlmacen: [Role.VisualizacionAlmacen],
+    // Roles que van a tener acceso a acciones de edición creación o eliminación en almacén
+    administrarAlmacen: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
   },
   gestion_humana: {
     // Roles permitidos para visualizar y editar el salario de los empleados

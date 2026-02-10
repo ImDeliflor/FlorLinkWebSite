@@ -16,6 +16,8 @@ import { useStorePendEntriesContext } from "../../entradas_pendientes/hooks/useS
 import StorePendEntriesModal from "../../entradas_pendientes/components/modals/StorePendEntriesModal";
 import { BsBoxes } from "react-icons/bs";
 import StoreIssueModal from "../../salidas/components/modals/StoreIssueModal";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import { IndividualPrivileges } from "@/shared/config/permissions";
 
 export const StoreInventory = () => {
   // Configuración de fecha, hora y zona horaria
@@ -38,8 +40,11 @@ export const StoreInventory = () => {
 
   // Estado de uso para el filtro de inventario
   const [formFilter, setFormFilter] = useState<FormFilterInventory>(
-    initialFilteredFormProduct
+    initialFilteredFormProduct,
   );
+
+  // Función para la protección de elementos por roles
+  const { canAccess } = useProtectedElement();
 
   // Función para filtrar el inventario
   const filteredInventario = filterInventario(inventario, formFilter);
@@ -104,8 +109,8 @@ export const StoreInventory = () => {
             {[...categorias]
               .sort((a, b) =>
                 a.nombre_categoria_producto.localeCompare(
-                  b.nombre_categoria_producto
-                )
+                  b.nombre_categoria_producto,
+                ),
               )
               .map((_valor, index) => (
                 <option key={index} value={_valor.nombre_categoria_producto}>
@@ -183,15 +188,19 @@ export const StoreInventory = () => {
                   <td className="px-4 py-2">{item.descripcion}</td>
                   <td className="px-4 py-2">{item.unidad_medida}</td>
                   <td className="px-4 py-2">{item.inventario_actual}</td>
-                  <td className="px-4 py-2">
-                    {item.inventario_actual > 0 && (
-                      <StoreIssueModal
-                        inventory={item}
-                        tiene_lote={item.tiene_lote_disponible}
-                        key={item.id_inventario}
-                      />
-                    )}
-                  </td>
+                  {canAccess(
+                    IndividualPrivileges.almacen.administrarAlmacen,
+                  ) && (
+                    <td className="px-4 py-2">
+                      {item.inventario_actual > 0 && (
+                        <StoreIssueModal
+                          inventory={item}
+                          tiene_lote={item.tiene_lote_disponible}
+                          key={item.id_inventario}
+                        />
+                      )}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

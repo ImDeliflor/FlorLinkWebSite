@@ -16,6 +16,9 @@ import { useProductContext } from "@/features/products/hooks/useProductContext";
 import { useEffect, useState } from "react";
 import type { DetalleCompra } from "@/features/products/types/product";
 import { BiDetail } from "react-icons/bi";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 interface DetailOrderProps {
   nro_orden: number | undefined;
@@ -32,6 +35,11 @@ export default function DetailOrder({
   canEdit = true,
   canChangeState = true,
 }: DetailOrderProps) {
+  // Configuración de la zona horaria
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.locale("es");
+
   // Traer los datos detallados de los productos
   const {
     productReport,
@@ -56,7 +64,7 @@ export default function DetailOrder({
 
   const getDataFiltered = (nro_orden: number | undefined) => {
     const dataFiltered = productReport.filter(
-      (product) => product.nro_orden_compra == nro_orden
+      (product) => product.nro_orden_compra == nro_orden,
     );
     setInitialProductReport(dataFiltered);
     setFilteredProductReport(dataFiltered);
@@ -68,7 +76,7 @@ export default function DetailOrder({
       setNombreSolicitante(
         initialProductReport[0].solicitado_por
           ? initialProductReport[0].solicitado_por
-          : ""
+          : "",
       );
     }
   }, [open]);
@@ -81,7 +89,7 @@ export default function DetailOrder({
   const updateFilteredProduct = (
     index: number,
     key: string,
-    value: string | number
+    value: string | number,
   ) => {
     setFilteredProductReport((prev) => {
       const updated = [...prev];
@@ -179,7 +187,7 @@ export default function DetailOrder({
             </DialogClose>
           ) : (
             <>
-              {canEdit && !is_jefe && !is_gerencia && (
+              {canEdit && !is_jefe && !is_gerencia && dayjs().day() !== 2 && (
                 <Button
                   disabled={
                     JSON.stringify(filteredProductReport) ==

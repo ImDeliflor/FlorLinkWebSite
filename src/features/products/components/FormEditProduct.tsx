@@ -25,7 +25,7 @@ interface FormEditProductProps {
   updateFilteredProduct: (
     index: number,
     key: string,
-    value: string | number
+    value: string | number,
   ) => void;
   is_jefe?: boolean;
   is_gerencia?: boolean;
@@ -69,8 +69,8 @@ export const FormEditProduct = ({
               estado_detalle_compra === "Pendiente"
                 ? "bg-[#E9B44C] text-[#ffff]"
                 : estado_detalle_compra === "Aprobado"
-                ? "bg-[#3FA271] text-[#ffff]"
-                : "bg-[#D64550] text-[#ffff]"
+                  ? "bg-[#3FA271] text-[#ffff]"
+                  : "bg-[#D64550] text-[#ffff]"
             } py-1.5 px-2 rounded-xl
             `}
           >
@@ -92,7 +92,7 @@ export const FormEditProduct = ({
           updateFilteredProduct(
             index_producto,
             "id_categoria",
-            Number(e.target.value)
+            Number(e.target.value),
           )
         }
         disabled={(is_jefe || is_gerencia) && true}
@@ -100,8 +100,8 @@ export const FormEditProduct = ({
         {[...categorias]
           .sort((a, b) =>
             a.nombre_categoria_producto.localeCompare(
-              b.nombre_categoria_producto
-            )
+              b.nombre_categoria_producto,
+            ),
           )
           .map((_valor, index) => (
             <option key={index} value={_valor.id_categoria_producto}>
@@ -117,7 +117,7 @@ export const FormEditProduct = ({
           updateFilteredProduct(
             index_producto,
             "descripcion_producto",
-            e.target.value
+            e.target.value,
           )
         }
         disabled={is_jefe || (is_gerencia && true)}
@@ -150,12 +150,12 @@ export const FormEditProduct = ({
           updateFilteredProduct(
             index_producto,
             "cantidad_solicitada",
-            Number(e.target.value)
+            Number(e.target.value),
           )
         }
         disabled={(is_jefe || is_gerencia) && true}
       />
-      {is_jefe || is_gerencia || (
+      {is_jefe || is_gerencia || dayjs().day() == 2 || (
         <Button
           onClick={() => deleteProduct(id_detalle_compra)}
           disabled={canEdit ? false : true}
@@ -173,7 +173,7 @@ export const FormEditProduct = ({
                 id_detalle_compra,
                 estado_detalle_compra: "Aprobado",
                 fecha_validacion_detalle_compra: dayjs().format(
-                  "YYYY-MM-DD HH:mm:ss"
+                  "YYYY-MM-DD HH:mm:ss",
                 ),
               })
             }
@@ -188,7 +188,7 @@ export const FormEditProduct = ({
                 id_detalle_compra,
                 estado_detalle_compra: "Rechazado",
                 fecha_validacion_detalle_compra: dayjs().format(
-                  "YYYY-MM-DD HH:mm:ss"
+                  "YYYY-MM-DD HH:mm:ss",
                 ),
               })
             }

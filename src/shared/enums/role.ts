@@ -11,6 +11,7 @@ export const Role = {
   SalidasAlmacen: 11,
   AdminGH: 12,
   UsuarioGH: 13,
+  VisualizacionAlmacen: 14,
 } as const;
 
 export type Role = (typeof Role)[keyof typeof Role];
