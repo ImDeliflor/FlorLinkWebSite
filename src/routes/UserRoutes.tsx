@@ -26,6 +26,7 @@ import { Employees } from "@/features/human_resources/empleados/components/Emplo
 import { EmployeeProvider } from "@/features/human_resources/empleados/context/EmployeeProvider";
 import { EvaluacionesMainScreen } from "@/features/human_resources/evaluacion_desempenio/components/EvaluacionesMainScreen";
 import { EvaluacionProvider } from "@/features/human_resources/evaluacion_desempenio/context/EvaluacionProvider";
+import { LotesVencimientoReport } from "@/features/store/reports/LotesVencimientoReport";
 
 export const UserRoutes = () => {
   return (
@@ -188,6 +189,18 @@ export const UserRoutes = () => {
                     </LoteProductsProvider>
                   </StoreIssuesProvider>
                 </StoreEntriesProvider>
+              }
+            />
+            {/* Rutas para los informes de almacen */}
+            <Route
+              path="/store/informes/lotes-vencimiento"
+              element={
+                <ProtectedRoute
+                  allowedRoles={
+                    PermissionsSections.almacen.informes.vencimientoLotes
+                  }
+                  element={<LotesVencimientoReport />}
+                />
               }
             />
             {/* RUTAS PARA GESTIÓN HUMANA */}

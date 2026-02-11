@@ -16,6 +16,7 @@ export const PermissionsDropdowns = {
     Role.VisualizacionAlmacen,
   ],
   gestion_humana: [Role.Admin, Role.AdminGH, Role.UsuarioGH],
+  informes_almacen: [Role.Admin, Role.ReportAlmacenLoteVencimiento],
 } as const;
 
 // Objeto para parametrizar los permisos de cada sección
@@ -63,6 +64,9 @@ export const PermissionsSections = {
       Role.SalidasAlmacen,
       Role.VisualizacionAlmacen,
     ],
+    informes: {
+      vencimientoLotes: [Role.Admin, Role.ReportAlmacenLoteVencimiento],
+    },
   },
   gestion_humana: {
     empleados: [Role.Admin, Role.AdminGH, Role.UsuarioGH],

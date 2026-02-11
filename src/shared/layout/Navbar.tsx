@@ -11,12 +11,14 @@ import {
 import { useProtectedElement } from "../hooks/useProtectedElement";
 import { BiStore } from "react-icons/bi";
 import { PiUsersThreeBold } from "react-icons/pi";
+import { ImStatsDots } from "react-icons/im";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdownContabilidad, setOpenDropdownContabilidad] =
     useState(false);
   const [openDropdownAlmacen, setOpenDropdownAlmacen] = useState(false);
+  const [openDropdownInfAlmacen, setOpenDropdownInfAlmacen] = useState(false);
   const [openDropdownGH, setOpenDropdownGH] = useState(false);
 
   const { logout } = useAuthStore();
@@ -77,7 +79,7 @@ export const Navbar = () => {
                   onClick={() =>
                     setOpenDropdownContabilidad(!openDropdownContabilidad)
                   }
-                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-semibold text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
                 >
                   <MdAccountBalance size={23} />
                   <span className="flex-1 ms-3 text-left whitespace-nowrap">
@@ -145,7 +147,7 @@ export const Navbar = () => {
 
                     {/* elemento para órdenes de mi equipo */}
                     {canAccess(
-                      PermissionsSections.contabilidad.ordenesEquipo
+                      PermissionsSections.contabilidad.ordenesEquipo,
                     ) && (
                       <li>
                         <NavLink
@@ -192,7 +194,7 @@ export const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => setOpenDropdownAlmacen(!openDropdownAlmacen)}
-                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-semibold text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
                 >
                   <BiStore size={23} />
                   <span className="flex-1 ms-3 text-left whitespace-nowrap">
@@ -222,7 +224,7 @@ export const Navbar = () => {
                   <ul className="py-2 space-y-2">
                     {/* elemento para los productos de almacén */}
                     {canAccess(
-                      PermissionsSections.almacen.productosAlmacen
+                      PermissionsSections.almacen.productosAlmacen,
                     ) && (
                       <li>
                         <NavLink
@@ -243,7 +245,7 @@ export const Navbar = () => {
 
                     {/* elemento para el inventario de almacén */}
                     {canAccess(
-                      PermissionsSections.almacen.inventarioAlmacen
+                      PermissionsSections.almacen.inventarioAlmacen,
                     ) && (
                       <li>
                         <NavLink
@@ -299,6 +301,68 @@ export const Navbar = () => {
                         </NavLink>
                       </li>
                     )}
+
+                    {/* elemento para los informes de contabilidad */}
+                    {canAccess(PermissionsDropdowns.informes_almacen) && (
+                      <>
+                        <li>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setOpenDropdownInfAlmacen(!openDropdownInfAlmacen)
+                            }
+                            className="flex items-center w-[90%] p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                          >
+                            <ImStatsDots size={23} />
+                            <span className="flex-1 ms-3 text-left whitespace-nowrap">
+                              Informes
+                            </span>
+                            <svg
+                              className={`w-3 h-3 transition-transform ${
+                                openDropdownInfAlmacen ? "rotate-180" : ""
+                              }`}
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 10 6"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="m1 1 4 4 4-4"
+                              />
+                            </svg>
+                          </button>
+                          {openDropdownInfAlmacen && (
+                            <ul className="py-2 space-y-2">
+                              {/* elemento para las órdenes nuevas */}
+                              {canAccess(
+                                PermissionsSections.almacen.informes
+                                  .vencimientoLotes,
+                              ) && (
+                                <li>
+                                  <NavLink
+                                    to="/store/informes/lotes-vencimiento"
+                                    className={({ isActive }) =>
+                                      `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                                    }
+                                  >
+                                    Vencimiento lotes
+                                  </NavLink>
+                                </li>
+                              )}
+                            </ul>
+                          )}
+                        </li>
+                      </>
+                    )}
                   </ul>
                 )}
               </li>
@@ -309,7 +373,7 @@ export const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => setOpenDropdownGH(!openDropdownGH)}
-                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-normal text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-semibold text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
                 >
                   <PiUsersThreeBold size={23} />
                   <span className="flex-1 ms-3 text-left whitespace-nowrap">
@@ -339,7 +403,7 @@ export const Navbar = () => {
                   <ul className="py-2 space-y-2">
                     {/* elemento para los empleados */}
                     {canAccess(
-                      PermissionsSections.gestion_humana.empleados
+                      PermissionsSections.gestion_humana.empleados,
                     ) && (
                       <li>
                         <NavLink
@@ -360,7 +424,8 @@ export const Navbar = () => {
 
                     {/* elemento para evaluaciones de desempeño */}
                     {canAccess(
-                      PermissionsSections.gestion_humana.evaluaciones_desempenio
+                      PermissionsSections.gestion_humana
+                        .evaluaciones_desempenio,
                     ) && (
                       <li>
                         <NavLink
