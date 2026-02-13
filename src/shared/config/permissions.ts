@@ -65,7 +65,11 @@ export const PermissionsSections = {
       Role.VisualizacionAlmacen,
     ],
     informes: {
-      vencimientoLotes: [Role.Admin, Role.ReportAlmacenLoteVencimiento],
+      vencimientoLotes: [
+        Role.Admin,
+        Role.ReportAlmacenLoteVencimiento,
+        Role.Almacenista,
+      ],
     },
   },
   gestion_humana: {
@@ -80,7 +84,7 @@ export const IndividualPrivileges = {
     // Roles permitidos para crear ajustes de inventario, NC y ND
     accesoAINCND: [Role.AdminAlmacen],
     // Roles permitidos para crear productos
-    crearNuevoProducto: [Role.AdminAlmacen],
+    crearNuevoProducto: [Role.AdminAlmacen, Role.Almacenista],
     // Roles que no van a tener acceso a acciones de edición creación o eliminación en almacén
     visualizarAlmacen: [Role.VisualizacionAlmacen],
     // Roles que van a tener acceso a acciones de edición creación o eliminación en almacén
