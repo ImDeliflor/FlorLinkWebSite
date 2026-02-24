@@ -16,6 +16,8 @@ import ModalCreateEmployee from "./modals/ModalCreateEmployee";
 import { IoManOutline, IoWomanOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { GrSend } from "react-icons/gr";
+import ModalHijoemployee from "../../hijo/components/modals/ModalHijoEmployee";
+import ModalCentroCostos from "@/features/human_resources/empleado_centro_costos/components/ModalCentroCostos";
 
 export const Employees = () => {
   // Configuración de fecha, hora y zona horaria
@@ -37,6 +39,7 @@ export const Employees = () => {
     getFondosCesantias,
     getMediosTransporte,
     getTiposContrato,
+    getCentroCostos,
   } = useBasicTablesContext();
 
   // Contexto de las tablas básicas - categorías
@@ -44,7 +47,7 @@ export const Employees = () => {
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEmployees>(
-    initialFilteredFormEmployee
+    initialFilteredFormEmployee,
   );
 
   // Función para filtrar los empleados
@@ -74,6 +77,7 @@ export const Employees = () => {
     getFondosCesantias();
     getMediosTransporte();
     getTiposContrato();
+    getCentroCostos();
   }, []);
 
   return (
@@ -139,6 +143,8 @@ export const Employees = () => {
                 <th className="px-4 py-3 text-[#82385D]">Celular</th>
                 <th className="px-4 py-3"></th>
                 <th className="px-4 py-3"></th>
+                <th className="px-4 py-3"></th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -156,6 +162,12 @@ export const Employees = () => {
                   <td className="px-4 py-2">{item.celular}</td>
                   <td className="px-2 py-2">
                     <ModalDetailEmployee employee={item} />
+                  </td>
+                  <td className="px-2 py-2">
+                    <ModalHijoemployee employee={item} />
+                  </td>
+                  <td className="px-2 py-2">
+                    <ModalCentroCostos employee={item} />
                   </td>
                   {item.estado_empleado !== "Retirado" && (
                     <td className="px-2 py-2">

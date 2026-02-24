@@ -74,3 +74,7 @@ export interface TipoContrato {
   id_tipo_contrato: number;
   nombre_tipo_contrato: string;
 }
+export interface RolFamiliar {
+  id_rol_familiar: number;
+  nombre_rol_familiar: string;
+}

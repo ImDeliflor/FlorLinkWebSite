@@ -46,12 +46,14 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex w-[100vw] h-[100vh]">
-      <div className="w-[50%] h-full flex justify-center items-center">
-        <div className="flex flex-col">
-          <h3 className="border-4 border-[#82385D] border-l-0 border-r-0 px-14 py-3 text-xl font-bold rounded-4xl mb-10">
+    <div className="flex flex-col justify-center items-center lg:flex-row w-screen min-h-screen">
+      {/* LOGIN */}
+      <div className="w-full md:w-1/2 flex justify-center items-center p-6">
+        <div className="flex flex-col w-full max-w-md">
+          <h3 className="border-4 border-[#82385D] border-l-0 border-r-0 px-8 py-3 text-xl font-bold rounded-4xl mb-10 text-center">
             Inicio de Sesión
           </h3>
+
           <input
             type="text"
             className={styles.input_with_icon}
@@ -61,6 +63,7 @@ export const LoginPage = () => {
               setFormData({ ...formData, email: e.target.value })
             }
           />
+
           <input
             type="password"
             className={styles.input_with_icon}
@@ -70,8 +73,9 @@ export const LoginPage = () => {
               setFormData({ ...formData, password_hash: e.target.value })
             }
           />
+
           <button
-            className="flex items-center justify-center bg-[#E8B7BA] text-[15px] font-medium text-[#82385D] h-auto cursor-pointer py-3 px-6 rounded-xl mt-5"
+            className="flex items-center justify-center bg-[#E8B7BA] text-[15px] font-medium text-[#82385D] py-3 px-6 rounded-xl mt-5 cursor-pointer"
             onClick={handleLogin}
           >
             <CiLogin className="mr-4" size={20} color="#82385D" />
@@ -79,7 +83,12 @@ export const LoginPage = () => {
           </button>
         </div>
       </div>
-      <img src={portada_login} className="flex-1 rounded-4xl p-3"></img>
+
+      {/* IMAGEN */}
+      <img
+        src={portada_login}
+        className="hidden lg:block md:w-1/2 object-cover p-3 rounded-4xl"
+      />
     </div>
   );
 };

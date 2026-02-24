@@ -14,4 +14,5 @@ export const LS_KEYS = {
   FONDO_CESANTIAS: "basic_tables_fondo_cesantias",
   MEDIO_TRANSPORTE: "basic_tables_medio_transporte",
   TIPO_CONTRATO: "basic_tables_tipo_contrato",
+  ROL_FAMILIAR: "basic_tables_rol_familiar",
 } as const;

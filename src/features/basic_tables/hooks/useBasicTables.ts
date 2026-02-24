@@ -18,6 +18,7 @@ import type {
   FondoCesantias,
   MedioTransporte,
   TipoContrato,
+  RolFamiliar,
 } from "../types/basicTables";
 
 export const useBasicTables = () => {
@@ -34,16 +35,17 @@ export const useBasicTables = () => {
   const [fondosPensiones, setFondosPensiones] = useState<FondoPensiones[]>([]);
   const [fondosCesantias, setFondosCesantias] = useState<FondoCesantias[]>([]);
   const [mediosTransporte, setMediosTransporte] = useState<MedioTransporte[]>(
-    []
+    [],
   );
   const [tiposContrato, setTiposContrato] = useState<TipoContrato[]>([]);
+  const [rolFamiliar, setRolFamiliar] = useState<RolFamiliar[]>([]);
 
   /* ===================== HELPER ===================== */
   const fetchBasicTable = async <T>(
     url: string,
     lsKey: string,
     setter: React.Dispatch<React.SetStateAction<T[]>>,
-    forceReload = false
+    forceReload = false,
   ) => {
     if (!forceReload) {
       const cached = localStorage.getItem(lsKey);
@@ -65,7 +67,7 @@ export const useBasicTables = () => {
       "/categoria",
       LS_KEYS.CATEGORIAS,
       setCategorias,
-      forceReload
+      forceReload,
     );
 
   const getLaboratorios = (forceReload = false) =>
@@ -73,7 +75,7 @@ export const useBasicTables = () => {
       "/laboratorio",
       LS_KEYS.LABORATORIOS,
       setLaboratorios,
-      forceReload
+      forceReload,
     );
 
   const getCentroCostos = (forceReload = false) =>
@@ -81,7 +83,7 @@ export const useBasicTables = () => {
       "/centro-costos",
       LS_KEYS.CENTRO_COSTOS,
       setCentroCostos,
-      forceReload
+      forceReload,
     );
 
   const getTiposDocumento = (forceReload = false) =>
@@ -89,7 +91,7 @@ export const useBasicTables = () => {
       "/tipo-documento",
       LS_KEYS.TIPO_DOCUMENTO,
       setTiposDocumento,
-      forceReload
+      forceReload,
     );
 
   const getCiudades = (forceReload = false) =>
@@ -109,7 +111,7 @@ export const useBasicTables = () => {
       "/estado-civil",
       LS_KEYS.ESTADO_CIVIL,
       setEstadosCiviles,
-      forceReload
+      forceReload,
     );
 
   const getEps = (forceReload = false) =>
@@ -120,7 +122,7 @@ export const useBasicTables = () => {
       "/fondo-pensiones",
       LS_KEYS.FONDO_PENSIONES,
       setFondosPensiones,
-      forceReload
+      forceReload,
     );
 
   const getFondosCesantias = (forceReload = false) =>
@@ -128,7 +130,7 @@ export const useBasicTables = () => {
       "/fondo-cesantias",
       LS_KEYS.FONDO_CESANTIAS,
       setFondosCesantias,
-      forceReload
+      forceReload,
     );
 
   const getMediosTransporte = (forceReload = false) =>
@@ -136,7 +138,7 @@ export const useBasicTables = () => {
       "/medio-transporte",
       LS_KEYS.MEDIO_TRANSPORTE,
       setMediosTransporte,
-      forceReload
+      forceReload,
     );
 
   const getTiposContrato = (forceReload = false) =>
@@ -144,7 +146,15 @@ export const useBasicTables = () => {
       "/tipo-contrato",
       LS_KEYS.TIPO_CONTRATO,
       setTiposContrato,
-      forceReload
+      forceReload,
+    );
+
+  const getRolesFamiliar = (forceReload = false) =>
+    fetchBasicTable(
+      "/rol_familiar",
+      LS_KEYS.ROL_FAMILIAR,
+      setRolFamiliar,
+      forceReload,
     );
 
   return {
@@ -176,5 +186,7 @@ export const useBasicTables = () => {
     getMediosTransporte,
     tiposContrato,
     getTiposContrato,
+    rolFamiliar,
+    getRolesFamiliar,
   };
 };

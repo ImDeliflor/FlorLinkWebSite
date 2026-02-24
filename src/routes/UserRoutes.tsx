@@ -27,17 +27,25 @@ import { EmployeeProvider } from "@/features/human_resources/empleados/context/E
 import { EvaluacionesMainScreen } from "@/features/human_resources/evaluacion_desempenio/components/EvaluacionesMainScreen";
 import { EvaluacionProvider } from "@/features/human_resources/evaluacion_desempenio/context/EvaluacionProvider";
 import { LotesVencimientoReport } from "@/features/store/reports/LotesVencimientoReport";
+import { ConsumoCalderaMainScreen } from "@/features/produccion/consumo_caldera/components/ConsumoCalderaMainScreen";
 
 export const UserRoutes = () => {
   return (
     <div className="flex">
       <Navbar /> {/* Sidebar que se verá en toda la aplicación */}
-      <div className="flex-1 min-h-full">
+      <div className="w-screen min-h-full lg:flex-1">
         <GlobalDataProvider>
           <Routes>
             {/* Ruta inicial (bienvenida) */}
-            <Route path="/" element={<MainPage />} />
 
+            <Route
+              path="/"
+              element={
+                <BasicTablesProvider>
+                  <MainPage />
+                </BasicTablesProvider>
+              }
+            />
             {/* Ruta en caso de no estar autorizado */}
             <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -233,6 +241,23 @@ export const UserRoutes = () => {
                       element={<EvaluacionesMainScreen />}
                     />
                   </EvaluacionProvider>
+                </EmployeeProvider>
+              }
+            />
+            {/* RUTAS PARA PRODUCCIÓN */}
+            {/* Ruta para el consumo de la caldera */}
+            <Route
+              path="/produccion/consumo-caldera"
+              element={
+                <EmployeeProvider>
+                  <BasicTablesProvider>
+                    <ProtectedRoute
+                      allowedRoles={
+                        PermissionsSections.produccion.consumo_caldera
+                      }
+                      element={<ConsumoCalderaMainScreen />}
+                    />
+                  </BasicTablesProvider>
                 </EmployeeProvider>
               }
             />
