@@ -19,6 +19,7 @@ import type {
   MedioTransporte,
   TipoContrato,
   RolFamiliar,
+  AreaProduccion,
 } from "../types/basicTables";
 
 export const useBasicTables = () => {
@@ -39,6 +40,7 @@ export const useBasicTables = () => {
   );
   const [tiposContrato, setTiposContrato] = useState<TipoContrato[]>([]);
   const [rolFamiliar, setRolFamiliar] = useState<RolFamiliar[]>([]);
+  const [areaProduccion, setAreaProduccion] = useState<AreaProduccion[]>([]);
 
   /* ===================== HELPER ===================== */
   const fetchBasicTable = async <T>(
@@ -151,9 +153,17 @@ export const useBasicTables = () => {
 
   const getRolesFamiliar = (forceReload = false) =>
     fetchBasicTable(
-      "/rol_familiar",
+      "/rol-familiar",
       LS_KEYS.ROL_FAMILIAR,
       setRolFamiliar,
+      forceReload,
+    );
+
+  const getAreasProduccion = (forceReload = false) =>
+    fetchBasicTable(
+      "/area-produccion",
+      LS_KEYS.AREA_PRODUCCION,
+      setAreaProduccion,
       forceReload,
     );
 
@@ -188,5 +198,7 @@ export const useBasicTables = () => {
     getTiposContrato,
     rolFamiliar,
     getRolesFamiliar,
+    areaProduccion,
+    getAreasProduccion,
   };
 };

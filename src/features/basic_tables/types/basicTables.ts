@@ -78,3 +78,9 @@ export interface RolFamiliar {
   id_rol_familiar: number;
   nombre_rol_familiar: string;
 }
+
+export interface AreaProduccion {
+  id_area_produccion: number;
+  nombre_area_produccion: string;
+  id_centro_costos: number;
+}

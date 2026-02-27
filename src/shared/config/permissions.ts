@@ -112,6 +112,6 @@ export const IndividualPrivileges = {
   },
   produccion: {
     // Roles permitidos para crear consumos de la caldera
-    crearConsumo: [Role.Admin],
+    crearConsumo: [Role.Superadmin],
   },
 } as const;

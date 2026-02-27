@@ -20,6 +20,7 @@ export const MainPage = () => {
     getMediosTransporte,
     getTiposContrato,
     getCentroCostos,
+    getAreasProduccion,
   } = useBasicTablesContext();
 
   // useEffect para traer las tablas básicas
@@ -36,6 +37,7 @@ export const MainPage = () => {
     getMediosTransporte(true);
     getTiposContrato(true);
     getCentroCostos(true);
+    getAreasProduccion(true);
   }, []);
 
   return (

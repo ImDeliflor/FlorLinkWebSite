@@ -15,4 +15,5 @@ export const LS_KEYS = {
   MEDIO_TRANSPORTE: "basic_tables_medio_transporte",
   TIPO_CONTRATO: "basic_tables_tipo_contrato",
   ROL_FAMILIAR: "basic_tables_rol_familiar",
+  AREA_PRODUCCION: "basic_tables_area_produccion",
 } as const;

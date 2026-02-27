@@ -36,7 +36,7 @@ export const Navbar = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed ${
           isOpen ? "top-4 left-68" : "top-4 left-4"
-        } z-50 lg:hidden bg-[#81194D] p-2 rounded-lg shadow`}
+        } z-50 lg:hidden bg-[#81194dba] p-2 rounded-lg shadow`}
       >
         {isOpen ? (
           <IoClose size={26} color="#E8B7BA" />
