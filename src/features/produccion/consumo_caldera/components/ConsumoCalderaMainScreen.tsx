@@ -126,13 +126,15 @@ export const ConsumoCalderaMainScreen = () => {
                 {dataConsumos?.map((consumo, index) => (
                   <tr key={index} className="text-center">
                     <td className="px-4 py-2">
-                      {dayjs(consumo.fecha_hora_inicio)
+                      {dayjs
+                        .utc(consumo.fecha_hora_inicio)
                         .tz("America/Bogota")
                         .format("YYYY-MM-DD HH:mm")}
                     </td>
                     <td className="px-4 py-2">
                       {consumo.fecha_hora_fin ? (
-                        dayjs(consumo.fecha_hora_fin)
+                        dayjs
+                          .utc(consumo.fecha_hora_fin)
                           .tz("America/Bogota")
                           .format("YYYY-MM-DD HH:mm")
                       ) : (
