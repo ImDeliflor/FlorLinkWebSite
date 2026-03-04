@@ -63,7 +63,9 @@ export const ConsumoCalderaMainScreen = () => {
               Consumo Caldera
             </span>
           </div>
-          <ModalIniciarConsumo />
+          {canAccess(IndividualPrivileges.produccion.crearConsumo) && (
+            <ModalIniciarConsumo />
+          )}
         </div>
       </div>
 
@@ -92,7 +94,7 @@ export const ConsumoCalderaMainScreen = () => {
         </div>
       )}
 
-      <div className="flex flex-col items-center min-h-[55%] max-h-auto min-w-full bg-white p-5 rounded-[0.7rem]">
+      <div className="flex-1 flex-col items-center min-h-[55%] max-h-auto min-w-full bg-white p-5 rounded-[0.7rem]">
         {/* loading */}
         {isLoadingConsumos && <LoadingSpinner />}
         {/* error */}

@@ -22,7 +22,11 @@ export const PermissionsDropdowns = {
     Role.UsuarioGH,
     Role.UsuarioEvalDesempenio,
   ],
-  produccion: [Role.Superadmin],
+  produccion: [
+    Role.Admin,
+    Role.UsuarioConsumoCaldera,
+    Role.VisualizacionConsumoCaldera,
+  ],
 } as const;
 
 // Objeto para parametrizar los permisos de cada sección
@@ -87,7 +91,11 @@ export const PermissionsSections = {
     ],
   },
   produccion: {
-    consumo_caldera: [Role.Superadmin],
+    consumo_caldera: [
+      Role.Admin,
+      Role.UsuarioConsumoCaldera,
+      Role.VisualizacionConsumoCaldera,
+    ],
   },
 } as const;
 
@@ -105,13 +113,13 @@ export const IndividualPrivileges = {
   },
   gestion_humana: {
     // Roles permitidos para visualizar y editar el salario de los empleados
-    accesoSalario: [Role.AdminGH],
+    accesoSalario: [Role.Admin, Role.AdminGH],
     evaluaciones_desempenio: {
       grupo_primario: [Role.Admin],
     },
   },
   produccion: {
     // Roles permitidos para crear consumos de la caldera
-    crearConsumo: [Role.Superadmin],
+    crearConsumo: [Role.UsuarioConsumoCaldera],
   },
 } as const;

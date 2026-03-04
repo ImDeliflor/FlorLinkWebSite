@@ -492,7 +492,7 @@ export const Navbar = () => {
                   <ul className="py-2 space-y-2">
                     {/* elemento para los empleados */}
                     {canAccess(
-                      PermissionsSections.gestion_humana.empleados,
+                      PermissionsSections.produccion.consumo_caldera,
                     ) && (
                       <li>
                         <NavLink
