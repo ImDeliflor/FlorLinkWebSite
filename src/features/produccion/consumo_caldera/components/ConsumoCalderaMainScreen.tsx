@@ -121,6 +121,9 @@ export const ConsumoCalderaMainScreen = () => {
                   <th className="px-4 py-3 text-[#82385D]">Reporte inicial</th>
                   <th className="px-4 py-3 text-[#82385D]">Reporte final</th>
                   <th className="px-4 py-3 text-[#82385D]">Consumo total</th>
+                  <th className="px-4 py-3 text-[#82385D]">
+                    Camas esterilizadas
+                  </th>
                   <th className="px-4 py-3 text-[#82385D]">Consumo de</th>
                 </tr>
               </thead>
@@ -162,6 +165,12 @@ export const ConsumoCalderaMainScreen = () => {
                     </td>
                     <td className="px-4 py-2">
                       {consumo.total_consumo_medidor}
+                    </td>
+                    <td className="px-4 py-2">
+                      {consumo.cama_inicial} - {consumo.cama_final}{" "}
+                      <span className="font-bold">
+                        ({consumo.camas_esterilizadas})
+                      </span>
                     </td>
                     <td className="px-4 py-2">{consumo.nombre_responsable}</td>
                   </tr>

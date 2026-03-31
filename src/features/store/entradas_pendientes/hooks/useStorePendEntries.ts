@@ -1,7 +1,7 @@
 import api from "@/shared/api/axiosConfig";
 import type {
-  PendingEntry,
   PendingEntryReport,
+  ProcessEntradaPendiente,
   UpdatePendingEntry,
 } from "../types/pendingEntry";
 import { API_BASE_URL } from "@/config/apiConfig";
@@ -17,7 +17,7 @@ export const useStorePendEntries = () => {
   const getPendingEntries = async () => {
     try {
       const response = await api.get(
-        `${API_BASE_URL}/entradas-pendientes/estado-pendiente`
+        `${API_BASE_URL}/entradas-pendientes/estado-pendiente`,
       );
       setPendEntries(response.data);
     } catch (error) {
@@ -26,15 +26,20 @@ export const useStorePendEntries = () => {
     }
   };
 
-  // Función para guardar una entrada pendiente
-  const handlerSavePendingEntry = async (pendEntry: PendingEntry) => {
+  const handlerProcessPendingEntry = async (
+    id_product: number,
+    data_entry: ProcessEntradaPendiente,
+  ) => {
     try {
-      await api.post(`${API_BASE_URL}/entradas-pendientes`, pendEntry);
-      console.log("Entrada pendiente guardada");
+      await api.post(
+        `${API_BASE_URL}/entradas-pendientes/process/${id_product}`,
+        data_entry,
+      );
     } catch (error) {
       console.error(
-        "Error al guardar la entrada pendiente del producto: ",
-        pendEntry.cod_producto
+        "Error al actualizar la entrada pendiente del producto: ",
+        id_product,
+        error,
       );
       throw error;
     }
@@ -43,17 +48,17 @@ export const useStorePendEntries = () => {
   // Función para actualizar una entrada pendiente
   const handlerUpdatePendingEntry = async (
     id_entry: number,
-    pendEntry: UpdatePendingEntry
+    pendEntry: UpdatePendingEntry,
   ) => {
     try {
       await api.put(
         `${API_BASE_URL}/entradas-pendientes/${id_entry}`,
-        pendEntry
+        pendEntry,
       );
     } catch (error) {
       console.error(
         "Error al actualizar la entrada pendiente del producto: ",
-        pendEntry.cod_producto
+        pendEntry.cod_producto,
       );
       throw error;
     }
@@ -63,7 +68,7 @@ export const useStorePendEntries = () => {
   return {
     pendEntries,
     getPendingEntries,
-    handlerSavePendingEntry,
+    handlerProcessPendingEntry,
     handlerUpdatePendingEntry,
   };
 };

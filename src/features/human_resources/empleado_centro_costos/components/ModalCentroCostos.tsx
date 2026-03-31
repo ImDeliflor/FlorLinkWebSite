@@ -173,7 +173,7 @@ export default function ModalCentroCostos({ employee }: EmployeeProps) {
                   size={20}
                   color="#E8B7BA"
                 />
-                Añadir hij@
+                Añadir centros costos
               </button>
             </div>
           )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -19,6 +20,7 @@ import { useLoteProductsContext } from "@/features/store/lote_productos/hooks/us
 import { CiTrash } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useStoreInventoryContext } from "@/features/store/inventario/hooks/useStoreInventoryContext";
+import Swal from "sweetalert2";
 
 export default function StorePendEntriesModal() {
   // Configuración de la zona horaria
@@ -28,20 +30,15 @@ export default function StorePendEntriesModal() {
 
   /*********************************  CONTEXTOS *************************************/
   // Contexto de entradas pendientes
-  const { pendEntries, getPendingEntries, handlerUpdatePendingEntry } =
+  const { pendEntries, getPendingEntries, handlerProcessPendingEntry } =
     useStorePendEntriesContext();
 
   // Contexto de los lotes
-  const { arrayProducts, addLote, removeLote, saveAllLotes, resetLotes } =
+  const { arrayProducts, addLote, removeLote, resetLotes } =
     useLoteProductsContext();
 
   // Contexto de inventario
-  const {
-    getStoreInventory,
-    findOneItemInventory,
-    handlerSaveInventory,
-    handlerUpdateInventory,
-  } = useStoreInventoryContext();
+  const { getStoreInventory } = useStoreInventoryContext();
 
   // useState para manejar el estado del modal
   const [open, setOpen] = useState(false);
@@ -65,60 +62,56 @@ export default function StorePendEntriesModal() {
     resetLotes();
   }, [open]);
 
-  useEffect(() => {
-    console.log(arrayProducts);
-  }, [arrayProducts]);
-
   // Suma total de la cantidad disponible de todos los lotes
   const totalCantidad = arrayProducts.reduce(
     (acc, item) => acc + item.cantidad_disponible_lote,
-    0
+    0,
   );
+
+  // Función para añadir fecha de registro al array
+  const addFechaRegistroArray = (array: any[], fecha: string) => {
+    return array.map((item) => ({
+      ...item,
+      fecha_ingreso: fecha,
+    }));
+  };
+
+  // useState para habilitar/deshabilitar
+  const [disabledButton, setDisabledButton] = useState(false);
 
   // Función para guardar los lotes y modificar la entrada pendiente
   const handlerSaveLote = async () => {
-    const lotesSuccess = await saveAllLotes(
-      selectedProduct.cod_producto,
-      setOpen
-    );
+    setDisabledButton(true);
 
-    // En caso de que se hayan guardado bien todos los lotes
-    if (lotesSuccess) {
-      // Buscar el código del producto en el inventario
-      const dataInventory = await findOneItemInventory(
-        selectedProduct.cod_producto
-      );
+    try {
+      await handlerProcessPendingEntry(selectedProduct.cod_producto, {
+        entrada_pendiente: {
+          id_entrada_pendiente: selectedProduct.id_entrada_pendiente,
+          cantidad_a_registrar: selectedProduct.cantidad_a_registrar,
+          fecha_registro: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        lote_producto: addFechaRegistroArray(
+          arrayProducts,
+          dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        ),
+      });
 
-      // En caso de que el código no esté en el inventario
-      if (!dataInventory.exists) {
-        // Crear un nuevo registro en el inventario
-        await handlerSaveInventory({
-          cod_producto: selectedProduct.cod_producto,
-          inventario_actual: selectedProduct.cantidad_a_registrar,
-        });
-      }
-
-      // En caso de que el código esté en el inventario
-      if (dataInventory.exists) {
-        // Actualizar el inventario sumando el valor actual con el nuevo
-        await handlerUpdateInventory(dataInventory.data.id_inventario, {
-          inventario_actual:
-            dataInventory.data.inventario_actual +
-            selectedProduct.cantidad_a_registrar,
-        });
-      }
-
-      // Modificar el estado de la entrada pendiente y la fecha de registro
-      handlerUpdatePendingEntry(selectedProduct.id_entrada_pendiente, {
-        estado_entrada: "Ingresado",
-        fecha_registro: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      setOpen(false);
+      Swal.fire({
+        icon: "success",
+        title: "¡Todos los lotes fueron registrados exitosamente!",
+        confirmButtonColor: "#82385D",
       });
 
       // Obtener las entradas
-      getPendingEntries();
+      await getPendingEntries();
 
       // Obtener el inventario actualizado
-      getStoreInventory();
+      await getStoreInventory();
+    } catch (error) {
+      throw new Error(`Error al procesar la entrada pendiente: ${error}`);
+    } finally {
+      setDisabledButton(false);
     }
   };
 
@@ -138,7 +131,7 @@ export default function StorePendEntriesModal() {
           <DialogTitle className="text-[#484848] text-2xl text-center">
             Tienes{" "}
             {Number(
-              selectedProduct.cantidad_a_registrar - totalCantidad
+              selectedProduct.cantidad_a_registrar - totalCantidad,
             ).toFixed(1)}{" "}
             pendientes por ingresar de {selectedProduct.descripcion}
           </DialogTitle>
@@ -212,15 +205,16 @@ export default function StorePendEntriesModal() {
         <DialogFooter>
           {Number(
             Number(
-              selectedProduct.cantidad_a_registrar - totalCantidad
-            ).toFixed(1)
+              selectedProduct.cantidad_a_registrar - totalCantidad,
+            ).toFixed(1),
           ) === 0 &&
             selectedProduct.cantidad_a_registrar > 0 && (
               <Button
                 className="bg-[#82385D] text-[#E8B7BA] hover:text-[#E8B7BA] hover:bg-[#82385D] cursor-pointer mx-5 px-10"
+                disabled={disabledButton}
                 onClick={handlerSaveLote}
               >
-                Registrar entradas
+                Registrar lotes
               </Button>
             )}
         </DialogFooter>

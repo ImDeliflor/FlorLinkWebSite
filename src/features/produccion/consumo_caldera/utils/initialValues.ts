@@ -2,6 +2,8 @@ export const initialValueNewConsumo = {
   fecha_hora_inicio: "",
   id_area_produccion: 0,
   reporte_inicial_medidor: 0,
+  cama_inicial: 0,
+  cama_final: 0,
 };
 
 export const initialValueFinishConsumo = {

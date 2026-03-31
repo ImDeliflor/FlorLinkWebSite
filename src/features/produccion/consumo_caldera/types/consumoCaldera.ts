@@ -5,6 +5,8 @@ export interface ConsumoCaldera {
   id_area_produccion: number;
   reporte_inicial_medidor: number;
   reporte_final_medidor?: number | undefined;
+  cama_inicial: number;
+  cama_final: number;
   fecha_creacion: string;
   fecha_modificacion?: string | undefined;
   created_by: number;
@@ -22,6 +24,9 @@ export interface ConsumoCalderaReport {
   reporte_inicial_medidor: number;
   reporte_final_medidor: number;
   total_consumo_medidor: number;
+  cama_inicial: number;
+  cama_final: number;
+  camas_esterilizadas: number;
   fecha_creacion: string;
   fecha_modificacion: string;
   created_by: number;

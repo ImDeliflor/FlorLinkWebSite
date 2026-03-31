@@ -18,12 +18,19 @@ import { Button } from "@/components/ui/button";
 import { GrSend } from "react-icons/gr";
 import ModalHijoemployee from "../../hijo/components/modals/ModalHijoEmployee";
 import ModalCentroCostos from "@/features/human_resources/empleado_centro_costos/components/ModalCentroCostos";
+import { useGetEmpleado } from "../hooks/useEmpleado";
+import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
+import { ErrorMessage } from "@/shared/components/ErrorMessage";
+import { EmptyData } from "@/shared/components/EmptyData";
 
 export const Employees = () => {
   // Configuración de fecha, hora y zona horaria
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.locale("es");
+
+  /*********************************REACT QUERY *************************************/
+  const { data: dataEmpleado = [], isLoading, error } = useGetEmpleado();
 
   /*********************************  CONTEXTOS *************************************/
   // Contexto de las tablas básicas - categorías
@@ -43,7 +50,7 @@ export const Employees = () => {
   } = useBasicTablesContext();
 
   // Contexto de las tablas básicas - categorías
-  const { employees, getEmployees, takeOutEmployee } = useEmployeeContext();
+  const { takeOutEmployee } = useEmployeeContext();
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEmployees>(
@@ -51,7 +58,7 @@ export const Employees = () => {
   );
 
   // Función para filtrar los empleados
-  const filteredEmployees = filterEmployees(employees, formFilter);
+  const filteredEmployees = filterEmployees(dataEmpleado, formFilter);
 
   // Función para borrar filtros
   const resetFilters = () => {
@@ -65,7 +72,6 @@ export const Employees = () => {
 
   // useEffect para traer las tablas básicas
   useEffect(() => {
-    getEmployees();
     getTiposDocumento();
     getCiudades();
     getCargos();
@@ -134,6 +140,17 @@ export const Employees = () => {
 
       <div className="flex flex-col items-center min-h-[65%] max-h-[65%] min-w-full bg-white p-5 rounded-[0.7rem]">
         <div className="min-w-full max-w-full overflow-y-auto">
+          {/* loading */}
+          {isLoading && <LoadingSpinner />}
+          {/* Error */}
+          {error && (
+            <ErrorMessage message="No se pudieron traer los datos de los empleados" />
+          )}
+          {/* si no hay hijos registrados del empleado */}
+          {dataEmpleado?.length === 0 && (
+            <EmptyData message="No se encontró ningún empleado" />
+          )}
+
           <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
             <thead className="bg-[#E8B7BA] text-white sticky top-0 z-10">
               <tr>

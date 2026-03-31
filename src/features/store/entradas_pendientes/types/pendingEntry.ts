@@ -14,3 +14,19 @@ export interface PendingEntryReport extends PendingEntry {
   descripcion: string;
   unidad_medida: string;
 }
+
+export interface ProcessEntradaPendiente {
+  entrada_pendiente: {
+    id_entrada_pendiente: number;
+    cantidad_a_registrar: number;
+    fecha_registro: string;
+  };
+  lote_producto: {
+    nro_lote: string;
+    fecha_ingreso?: string;
+    fecha_vencimiento: string;
+    id_laboratorio: number;
+    categoria_toxicologica: "I" | "II" | "III" | "IV" | "No aplica";
+    cantidad_disponible_lote: number;
+  }[];
+}

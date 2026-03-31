@@ -87,7 +87,7 @@ export default function ModalIniciarConsumo() {
         </DialogHeader>
 
         {/* Contenido personalizado */}
-        <div className="flex items-center justify-center lg:gap-25 flex-wrap xl:flex-nowrap overflow-y-auto">
+        <div className="flex items-center justify-center lg:gap-25 flex-wrap overflow-y-auto">
           <div className="flex flex-col md:flex-row items-center gap-2">
             <label htmlFor="">Fecha/hora de inicio</label>
             <input
@@ -104,6 +104,7 @@ export default function ModalIniciarConsumo() {
               className="w-[100%] md:w-auto border p-2 rounded"
             />
           </div>
+
           <div className="flex flex-col md:flex-row items-center gap-2">
             <label htmlFor="">Área</label>
             <select
@@ -131,6 +132,7 @@ export default function ModalIniciarConsumo() {
                 ))}
             </select>
           </div>
+
           <div className="flex flex-col md:flex-row items-center gap-2">
             <label htmlFor="">Reporte inicial medidor</label>
             <input
@@ -140,6 +142,38 @@ export default function ModalIniciarConsumo() {
                 setDataNewConsumo((prev) => ({
                   ...prev,
                   reporte_inicial_medidor: Number(e.target.value),
+                }))
+              }
+              className="w-[100%] md:w-auto border p-2 rounded"
+              onFocus={(e) => e.target.select()}
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <label htmlFor="">Cama inicial</label>
+            <input
+              type="number"
+              value={dataNewConsumo.cama_inicial}
+              onChange={(e) =>
+                setDataNewConsumo((prev) => ({
+                  ...prev,
+                  cama_inicial: Number(e.target.value),
+                }))
+              }
+              className="w-[100%] md:w-auto border p-2 rounded"
+              onFocus={(e) => e.target.select()}
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <label htmlFor="">Cama final</label>
+            <input
+              type="number"
+              value={dataNewConsumo.cama_final}
+              onChange={(e) =>
+                setDataNewConsumo((prev) => ({
+                  ...prev,
+                  cama_final: Number(e.target.value),
                 }))
               }
               className="w-[100%] md:w-auto border p-2 rounded"
