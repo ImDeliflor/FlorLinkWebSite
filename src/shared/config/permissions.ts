@@ -110,6 +110,12 @@ export const IndividualPrivileges = {
     visualizarAlmacen: [Role.VisualizacionAlmacen],
     // Roles que van a tener acceso a acciones de edición creación o eliminación en almacén
     administrarAlmacen: [Role.Admin, Role.AdminAlmacen, Role.Almacenista],
+    // Roles que van a tener acceso a la edición del nro de factura de una entrada
+    modificarNroFacturaEntrada: [
+      Role.Admin,
+      Role.AdminAlmacen,
+      Role.Almacenista,
+    ],
   },
   gestion_humana: {
     // Roles permitidos para visualizar y editar el salario de los empleados

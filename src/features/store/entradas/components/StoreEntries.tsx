@@ -13,6 +13,8 @@ import { filterEntradas } from "../utils/entradasFilters";
 import { useStoreEntriesContext } from "../hooks/useStoreEntriesContext";
 import { CiInboxIn } from "react-icons/ci";
 import ModalUpdateEntry from "./modals/ModalUpdateEntry";
+import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
+import { IndividualPrivileges } from "@/shared/config/permissions";
 
 export const StoreEntries = () => {
   // Configuración de fecha, hora y zona horaria
@@ -37,6 +39,9 @@ export const StoreEntries = () => {
 
   // Función para filtrar las entradas
   const filteredEntries = filterEntradas(entries, formFilter);
+
+  // Función para dar acceso a un elemento
+  const { canAccess } = useProtectedElement();
 
   // Función para borrar filtros
   const resetFilters = () => {
@@ -158,8 +163,9 @@ export const StoreEntries = () => {
                 <th className="px-4 py-3 text-[#82385D]">Cantidad</th>
                 <th className="px-4 py-3 text-[#82385D]">Precio/u</th>
                 <th className="px-4 py-3 text-[#82385D]">Realizada por</th>
-                <th className="px-4 py-3 text-[#82385D]"></th>
-                <th className="px-4 py-3"></th>
+                {canAccess(
+                  IndividualPrivileges.almacen.modificarNroFacturaEntrada,
+                ) && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
             <tbody>
@@ -178,9 +184,13 @@ export const StoreEntries = () => {
                   <td className="px-4 py-2">{item.cantidad}</td>
                   <td className="px-4 py-2">{item.precio_unidad}</td>
                   <td className="px-4 py-2">{item.registrado_por}</td>
-                  <td className="px-4 py-2">
-                    <ModalUpdateEntry id_entrada={item.id_entrada_almacen} />
-                  </td>
+                  {canAccess(
+                    IndividualPrivileges.almacen.modificarNroFacturaEntrada,
+                  ) && (
+                    <td className="px-4 py-2">
+                      <ModalUpdateEntry id_entrada={item.id_entrada_almacen} />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
