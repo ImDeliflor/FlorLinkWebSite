@@ -13,6 +13,10 @@ export interface StoreEntry {
   fecha_factura?: string;
 }
 
+export interface UpdateStoreEntry {
+  nro_factura: string;
+}
+
 export interface ProcessStoreEntry {
   id_entrada_almacen?: number;
   tipo_documento: TipoDocumentoEnum;

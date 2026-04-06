@@ -98,7 +98,10 @@ export default function ModalProductEntry({ product }: ProductEntryProps) {
         .filter(([key]) => key !== "nro_factura")
         .every(
           ([, value]) =>
-            value !== "" && value !== null && value !== undefined && value !== 0
+            value !== "" &&
+            value !== null &&
+            value !== undefined &&
+            value !== 0,
         );
 
       // En caso de ser válido

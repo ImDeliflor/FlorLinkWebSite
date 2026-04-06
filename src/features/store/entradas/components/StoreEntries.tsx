@@ -12,6 +12,7 @@ import type { FormFilterEntries } from "../types/entry";
 import { filterEntradas } from "../utils/entradasFilters";
 import { useStoreEntriesContext } from "../hooks/useStoreEntriesContext";
 import { CiInboxIn } from "react-icons/ci";
+import ModalUpdateEntry from "./modals/ModalUpdateEntry";
 
 export const StoreEntries = () => {
   // Configuración de fecha, hora y zona horaria
@@ -31,7 +32,7 @@ export const StoreEntries = () => {
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEntries>(
-    initialFilteredFormProduct
+    initialFilteredFormProduct,
   );
 
   // Función para filtrar las entradas
@@ -54,7 +55,7 @@ export const StoreEntries = () => {
         <div className="flex items-center justify-center">
           <CiInboxIn size={35} color="#484848" />
           <span className="ml-4 text-3xl text-[#484848] font-bold">
-            Inventario almacén
+            Entradas almacén
           </span>
         </div>
       </div>
@@ -91,8 +92,8 @@ export const StoreEntries = () => {
             {[...categorias]
               .sort((a, b) =>
                 a.nombre_categoria_producto.localeCompare(
-                  b.nombre_categoria_producto
-                )
+                  b.nombre_categoria_producto,
+                ),
               )
               .map((_valor, index) => (
                 <option key={index} value={_valor.nombre_categoria_producto}>
@@ -157,6 +158,7 @@ export const StoreEntries = () => {
                 <th className="px-4 py-3 text-[#82385D]">Cantidad</th>
                 <th className="px-4 py-3 text-[#82385D]">Precio/u</th>
                 <th className="px-4 py-3 text-[#82385D]">Realizada por</th>
+                <th className="px-4 py-3 text-[#82385D]"></th>
                 <th className="px-4 py-3"></th>
               </tr>
             </thead>
@@ -176,6 +178,9 @@ export const StoreEntries = () => {
                   <td className="px-4 py-2">{item.cantidad}</td>
                   <td className="px-4 py-2">{item.precio_unidad}</td>
                   <td className="px-4 py-2">{item.registrado_por}</td>
+                  <td className="px-4 py-2">
+                    <ModalUpdateEntry id_entrada={item.id_entrada_almacen} />
+                  </td>
                 </tr>
               ))}
             </tbody>
