@@ -49,8 +49,8 @@ export const Employees = () => {
     getCentroCostos,
   } = useBasicTablesContext();
 
-  // Contexto de las tablas básicas - categorías
-  const { takeOutEmployee } = useEmployeeContext();
+  // Contexto de los empleados
+  const { takeOutEmployee, getEmployees } = useEmployeeContext();
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEmployees>(
@@ -84,6 +84,7 @@ export const Employees = () => {
     getMediosTransporte();
     getTiposContrato();
     getCentroCostos();
+    getEmployees();
   }, []);
 
   return (
