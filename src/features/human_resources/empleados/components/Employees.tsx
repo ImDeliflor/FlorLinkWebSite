@@ -22,6 +22,7 @@ import { useGetEmpleado } from "../hooks/useEmpleado";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { ErrorMessage } from "@/shared/components/ErrorMessage";
 import { EmptyData } from "@/shared/components/EmptyData";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Employees = () => {
   // Configuración de fecha, hora y zona horaria
@@ -50,7 +51,7 @@ export const Employees = () => {
   } = useBasicTablesContext();
 
   // Contexto de los empleados
-  const { takeOutEmployee, getEmployees } = useEmployeeContext();
+  const { takeOutEmployee } = useEmployeeContext();
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEmployees>(
@@ -66,8 +67,18 @@ export const Employees = () => {
   };
 
   // Función para retirar un empleado
+  const queryClient = useQueryClient();
+
   const hanlderTakeOutEmployee = async (id = 0) => {
-    await takeOutEmployee(id);
+    try {
+      await takeOutEmployee(id);
+
+      queryClient.invalidateQueries({
+        queryKey: ["empleados"],
+      });
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   // useEffect para traer las tablas básicas
@@ -84,7 +95,6 @@ export const Employees = () => {
     getMediosTransporte();
     getTiposContrato();
     getCentroCostos();
-    getEmployees();
   }, []);
 
   return (

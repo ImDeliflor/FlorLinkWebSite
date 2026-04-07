@@ -77,29 +77,37 @@ export const useEmployee = () => {
   // Función para retirar un empleado
   const takeOutEmployee = async (id_empleado = 0) => {
     try {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "Esta acción retirará a esta persona de la compañía",
-        icon: "warning",
-        showCancelButton: true,
+      const { value: date } = await Swal.fire({
+        title: "SELECCIONA LA FECHA",
+        input: "date",
+        inputLabel: "Fecha de retiro",
+        confirmButtonText: "Confirmar",
         confirmButtonColor: "#82385D",
         cancelButtonColor: "#D64550",
-        confirmButtonText: "¡Sí, retirar!",
         cancelButtonText: "Cancelar",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await api.put(
-            `${API_BASE_URL}/empleado/take-out-employee/${id_empleado}`,
-          );
-          await getEmployees();
-          Swal.fire({
-            title: "¡Retirado!",
-            text: "Esta persona ha sido retirada.",
-            icon: "success",
-            confirmButtonColor: "#82385D",
-          });
-        }
+        showCancelButton: true,
+        didOpen: () => {
+          const input = Swal.getInput() as HTMLInputElement | null;
+
+          if (input) {
+            input.min = new Date().toISOString().split("T")[0];
+          }
+        },
       });
+
+      if (date) {
+        await api.put(
+          `${API_BASE_URL}/empleado/take-out-employee/${id_empleado}`,
+          date,
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Retiro exitoso",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#82385D",
+        });
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
