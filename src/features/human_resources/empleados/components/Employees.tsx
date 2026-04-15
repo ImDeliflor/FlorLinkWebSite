@@ -23,6 +23,7 @@ import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { ErrorMessage } from "@/shared/components/ErrorMessage";
 import { EmptyData } from "@/shared/components/EmptyData";
 import { useQueryClient } from "@tanstack/react-query";
+import { HiOutlineUserGroup } from "react-icons/hi2";
 
 export const Employees = () => {
   // Configuración de fecha, hora y zona horaria
@@ -150,6 +151,13 @@ export const Employees = () => {
       </div>
 
       <div className="flex flex-col items-center min-h-[65%] max-h-[65%] min-w-full bg-white p-5 rounded-[0.7rem]">
+        <div className="flex items-center gap-3 mb-6 bg-[#E8B7BA] text-[#82385D] px-6 py-4 rounded-4xl border-2 border-[#82385dad] border-l-0 border-r-0">
+          <HiOutlineUserGroup size={33} />
+          <span className="text-xl font-bold">
+            {filteredEmployees.length} DE {dataEmpleado.length} EMPLEADOS
+            ACTIVOS
+          </span>
+        </div>
         <div className="min-w-full max-w-full overflow-y-auto">
           {/* loading */}
           {isLoading && <LoadingSpinner />}
