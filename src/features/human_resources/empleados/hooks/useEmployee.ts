@@ -90,7 +90,7 @@ export const useEmployee = () => {
           const input = Swal.getInput() as HTMLInputElement | null;
 
           if (input) {
-            input.min = new Date().toISOString().split("T")[0];
+            input.max = new Date().toISOString().split("T")[0];
           }
         },
       });
