@@ -52,7 +52,7 @@ export const Employees = () => {
   } = useBasicTablesContext();
 
   // Contexto de los empleados
-  const { takeOutEmployee } = useEmployeeContext();
+  const { takeOutEmployee, getEmployees } = useEmployeeContext();
 
   // Estado de uso para el filtro de entradas
   const [formFilter, setFormFilter] = useState<FormFilterEmployees>(
@@ -96,6 +96,7 @@ export const Employees = () => {
     getMediosTransporte();
     getTiposContrato();
     getCentroCostos();
+    getEmployees();
   }, []);
 
   return (
