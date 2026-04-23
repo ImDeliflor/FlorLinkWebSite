@@ -14,6 +14,7 @@ import { PiUsersThreeBold } from "react-icons/pi";
 import { ImStatsDots } from "react-icons/im";
 import { IoClose } from "react-icons/io5";
 import { GrUserWorker } from "react-icons/gr";
+import { BsBuildingGear } from "react-icons/bs";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +24,7 @@ export const Navbar = () => {
   const [openDropdownInfAlmacen, setOpenDropdownInfAlmacen] = useState(false);
   const [openDropdownGH, setOpenDropdownGH] = useState(false);
   const [openDropdownProduccion, setOpenDropdownProduccion] = useState(false);
+  const [openDropdownParametros, setOpenDropdownParametros] = useState(false);
 
   const { logout } = useAuthStore();
 
@@ -508,6 +510,86 @@ export const Navbar = () => {
                           onClick={() => setIsOpen(!isOpen)}
                         >
                           Consumo Caldera
+                        </NavLink>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
+            {/* Dropdown para Parámetros */}
+            {canAccess(PermissionsDropdowns.parametros) && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenDropdownParametros(!openDropdownParametros)
+                  }
+                  className="flex items-center w-full p-2 text-[1.2rem] hover:text-[#82385D] font-semibold text-white transition duration-75 rounded-lg group hover:bg-[#E8B7BA]"
+                >
+                  <BsBuildingGear size={23} />
+                  <span className="flex-1 ms-3 text-left whitespace-nowrap">
+                    Parametros
+                  </span>
+                  <svg
+                    className={`w-3 h-3 transition-transform ${
+                      openDropdownParametros ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+
+                {/* Submenú */}
+                {openDropdownParametros && (
+                  <ul className="py-2 space-y-2">
+                    {/* elemento para las tarifas mensuales */}
+                    {canAccess(
+                      PermissionsSections.parametros.tarifa_mensual,
+                    ) && (
+                      <li>
+                        <NavLink
+                          to="/parametros/tarifa-mensual"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                          onClick={() => setIsOpen(!isOpen)}
+                        >
+                          Tarifas Mensuales
+                        </NavLink>
+                      </li>
+                    )}
+                    {/* elemento para los costos fijos */}
+                    {canAccess(PermissionsSections.parametros.costo_fijo) && (
+                      <li>
+                        <NavLink
+                          to="/parametros/costo-fijo"
+                          className={({ isActive }) =>
+                            `flex items-center w-full font-light p-2 text-[1rem] pl-11 rounded-lg group transition duration-75 
+     ${
+       isActive
+         ? "bg-[#E8B7BA] text-[#82385D]" // estilos cuando está activa
+         : "text-white hover:text-[#82385D] hover:bg-[#E8B7BA]" // estilos normales
+     }`
+                          }
+                          onClick={() => setIsOpen(!isOpen)}
+                        >
+                          Costos Fijos
                         </NavLink>
                       </li>
                     )}

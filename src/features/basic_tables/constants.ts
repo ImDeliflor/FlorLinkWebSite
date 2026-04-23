@@ -16,4 +16,6 @@ export const LS_KEYS = {
   TIPO_CONTRATO: "basic_tables_tipo_contrato",
   ROL_FAMILIAR: "basic_tables_rol_familiar",
   AREA_PRODUCCION: "basic_tables_area_produccion",
+  TIPO_TARIFA: "basic_tables_tipo_tarifa",
+  CONCEPTO_COSTO: "basic_tables_concepto_costo",
 } as const;

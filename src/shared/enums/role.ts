@@ -16,6 +16,8 @@ export const Role = {
   UsuarioEvalDesempenio: 16,
   UsuarioConsumoCaldera: 17,
   VisualizacionConsumoCaldera: 18,
+  AdminTarifaMensual: 19,
+  AdminCostoFijo: 20,
 } as const;
 
 export type Role = (typeof Role)[keyof typeof Role];

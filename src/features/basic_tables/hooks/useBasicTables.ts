@@ -20,6 +20,8 @@ import type {
   TipoContrato,
   RolFamiliar,
   AreaProduccion,
+  TipoTarifa,
+  ConceptoCosto,
 } from "../types/basicTables";
 
 export const useBasicTables = () => {
@@ -41,6 +43,8 @@ export const useBasicTables = () => {
   const [tiposContrato, setTiposContrato] = useState<TipoContrato[]>([]);
   const [rolFamiliar, setRolFamiliar] = useState<RolFamiliar[]>([]);
   const [areaProduccion, setAreaProduccion] = useState<AreaProduccion[]>([]);
+  const [tipoTarifa, setTipoTarifa] = useState<TipoTarifa[]>([]);
+  const [conceptoCosto, setConceptoCosto] = useState<ConceptoCosto[]>([]);
 
   /* ===================== HELPER ===================== */
   const fetchBasicTable = async <T>(
@@ -167,6 +171,22 @@ export const useBasicTables = () => {
       forceReload,
     );
 
+  const getTiposTarifa = (forceReload = false) =>
+    fetchBasicTable(
+      "/tipo-tarifa",
+      LS_KEYS.TIPO_TARIFA,
+      setTipoTarifa,
+      forceReload,
+    );
+
+  const getConceptosCosto = (forceReload = false) =>
+    fetchBasicTable(
+      "/concepto-costo",
+      LS_KEYS.CONCEPTO_COSTO,
+      setConceptoCosto,
+      forceReload,
+    );
+
   return {
     categorias,
     getCategorias,
@@ -200,5 +220,9 @@ export const useBasicTables = () => {
     getRolesFamiliar,
     areaProduccion,
     getAreasProduccion,
+    tipoTarifa,
+    getTiposTarifa,
+    conceptoCosto,
+    getConceptosCosto,
   };
 };

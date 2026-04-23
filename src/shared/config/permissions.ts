@@ -27,6 +27,7 @@ export const PermissionsDropdowns = {
     Role.UsuarioConsumoCaldera,
     Role.VisualizacionConsumoCaldera,
   ],
+  parametros: [Role.Admin, Role.AdminTarifaMensual, Role.AdminCostoFijo],
 } as const;
 
 // Objeto para parametrizar los permisos de cada sección
@@ -96,6 +97,10 @@ export const PermissionsSections = {
       Role.UsuarioConsumoCaldera,
       Role.VisualizacionConsumoCaldera,
     ],
+  },
+  parametros: {
+    tarifa_mensual: [Role.Admin, Role.AdminTarifaMensual],
+    costo_fijo: [Role.Admin, Role.AdminCostoFijo],
   },
 } as const;
 

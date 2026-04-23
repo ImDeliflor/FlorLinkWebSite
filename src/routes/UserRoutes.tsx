@@ -28,6 +28,8 @@ import { EvaluacionesMainScreen } from "@/features/human_resources/evaluacion_de
 import { EvaluacionProvider } from "@/features/human_resources/evaluacion_desempenio/context/EvaluacionProvider";
 import { LotesVencimientoReport } from "@/features/store/reports/LotesVencimientoReport";
 import { ConsumoCalderaMainScreen } from "@/features/produccion/consumo_caldera/components/ConsumoCalderaMainScreen";
+import { TarifaMensualMainScreen } from "@/features/parametros/tarifa_mensual/components/TarifaMensualMainScreen";
+import { CostoFijoMainScreen } from "@/features/parametros/costo_fijo/components/CostoFijoMainScreen";
 
 export const UserRoutes = () => {
   return (
@@ -259,6 +261,32 @@ export const UserRoutes = () => {
                     />
                   </BasicTablesProvider>
                 </EmployeeProvider>
+              }
+            />
+
+            {/* RUTAS PARA LOS PARAMETROS */}
+            {/* Ruta para las tarifas mensuales*/}
+            <Route
+              path="/parametros/tarifa-mensual"
+              element={
+                <BasicTablesProvider>
+                  <ProtectedRoute
+                    allowedRoles={PermissionsSections.parametros.tarifa_mensual}
+                    element={<TarifaMensualMainScreen />}
+                  />
+                </BasicTablesProvider>
+              }
+            />
+            {/* Ruta para los costos mensuales fijos*/}
+            <Route
+              path="/parametros/costo-fijo"
+              element={
+                <BasicTablesProvider>
+                  <ProtectedRoute
+                    allowedRoles={PermissionsSections.parametros.costo_fijo}
+                    element={<CostoFijoMainScreen />}
+                  />
+                </BasicTablesProvider>
               }
             />
           </Routes>

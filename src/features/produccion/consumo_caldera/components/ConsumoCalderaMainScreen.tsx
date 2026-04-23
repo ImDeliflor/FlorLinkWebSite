@@ -94,7 +94,7 @@ export const ConsumoCalderaMainScreen = () => {
         </div>
       )}
 
-      <div className="flex-1 flex-col items-center min-h-[55%] max-h-auto min-w-full bg-white p-5 rounded-[0.7rem]">
+      <div className="flex flex-col items-center min-h-[55%] max-h-[55%] min-w-full bg-white p-5 rounded-[0.7rem]">
         {/* loading */}
         {isLoadingConsumos && <LoadingSpinner />}
         {/* error */}
@@ -107,7 +107,7 @@ export const ConsumoCalderaMainScreen = () => {
         )}
 
         {dataConsumos && dataConsumos?.length > 0 && (
-          <div className="min-w-full max-w-full overflow-y-auto overflow-x-auto">
+          <div className="min-w-full max-w-full overflow-y-auto">
             <table className="table-fixed min-w-full max-w-full border border-gray-200 rounded-lg shadow-sm text-sm text-left">
               <thead className="bg-[#E8B7BA] text-white sticky top-0 z-10">
                 <tr className="text-center">

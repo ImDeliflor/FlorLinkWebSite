@@ -15,6 +15,7 @@ import { CiInboxIn } from "react-icons/ci";
 import ModalUpdateEntry from "./modals/ModalUpdateEntry";
 import { useProtectedElement } from "@/shared/hooks/useProtectedElement";
 import { IndividualPrivileges } from "@/shared/config/permissions";
+import { formatCOP } from "@/shared/utils/formatCOP";
 
 export const StoreEntries = () => {
   // Configuración de fecha, hora y zona horaria
@@ -182,7 +183,7 @@ export const StoreEntries = () => {
                   </td>
                   <td className="px-4 py-2">{item.unidad_medida}</td>
                   <td className="px-4 py-2">{item.cantidad}</td>
-                  <td className="px-4 py-2">{item.precio_unidad}</td>
+                  <td className="px-4 py-2">{formatCOP(item.precio_unidad)}</td>
                   <td className="px-4 py-2">{item.registrado_por}</td>
                   {canAccess(
                     IndividualPrivileges.almacen.modificarNroFacturaEntrada,

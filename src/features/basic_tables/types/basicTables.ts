@@ -84,3 +84,13 @@ export interface AreaProduccion {
   nombre_area_produccion: string;
   id_centro_costos: number;
 }
+
+export interface TipoTarifa {
+  id_tipo_tarifa: number;
+  nombre: string;
+}
+
+export interface ConceptoCosto {
+  id_concepto_costo: number;
+  nombre_concepto_costo: string;
+}
